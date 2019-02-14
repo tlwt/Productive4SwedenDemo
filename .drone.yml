@@ -2,7 +2,9 @@
 
 pipeline:
   sonar-scanner:
-    image: newtmitch/sonar-scanner:latest
+    image: aosapps/drone-sonar-plugin
+    secrets: [sonar_host, sonar_token]
+    sources: iMXDemo
     when:
       event:
         - push
