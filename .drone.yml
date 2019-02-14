@@ -1,0 +1,10 @@
+#privileged: true requires to specify DRONE_ADMIN=username as env variable
+
+pipeline:
+  slack: # pushing out notification
+    image: plugins/slack:latest
+    channel: dev
+    webhook: https://hooks.slack.com/services/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
+    when:
+      status: [ success, failure ]
+branches: master
