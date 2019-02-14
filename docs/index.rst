@@ -5,6 +5,34 @@ Productive 4.0 - Sweden Demo
 
 In short: Industry 4.0 meets Bank 4.0.
 
+Project members (in alphabetical order)
+---------------------------------------
+* `Luleå Technical University <https://www.ltu.se/?l=en>`_
+
+  - Emanuel Palm
+  - Olof Schelén
+  - Ulf Bodin
+  
+* `Midroc <https://www.midroc.se/>`_
+
+  - Oscar Carlsson
+  
+* `NXP Semiconductors <https://www.nxp.com/>`_
+
+  - Till Witt
+  - Noah Winneberger
+  
+* `SEB <https://sebgroup.com/>`_
+
+  - Christian Lagerkvist
+  - Caroline Berg von Linde
+  - Johan Hörmark
+  - Jamie Walters
+  
+* `Volvo Trucks <https://www.volvotrucks.com>`_
+
+  - Richard Hedman
+
 
 .. toctree::
    :maxdepth: 2
