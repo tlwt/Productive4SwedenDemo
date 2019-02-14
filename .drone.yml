@@ -1,6 +1,12 @@
 #privileged: true requires to specify DRONE_ADMIN=username as env variable
 
 pipeline:
+  sonar-scanner:
+    image: quay.io/ukhomeofficedigital/sonar-scanner:v3.0.1
+    when:
+      event:
+        - push
+        - pull_request  
   slack: # pushing out notification
     image: plugins/slack:latest
     channel: dev
