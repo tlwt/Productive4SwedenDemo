@@ -11,17 +11,7 @@ pipeline:
         - pull_request
   gitter:
     image: plugins/gitter
-    secrets: [gitter_webhok]
-  docsToRepo: # pushing the docs back to the repo
-    image: plugins/git
-    commands:
-       - cd ./doxygen
-       - git config --global user.email "drone@tillwitt.de"
-       - git config --global user.name "Drone"
-       - git status
-       - git add --all
-       - git commit -am "updated doxygen and sphinxdocs [CI SKIP]"
-       - git push --set-upstream origin master
+    secrets: [gitter_webhook]
   slack: # pushing out notification
     image: plugins/slack:latest
     channel: dev
