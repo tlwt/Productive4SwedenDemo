@@ -1,10 +1,14 @@
 #privileged: true requires to specify DRONE_ADMIN=username as env variable
 
 pipeline:
-  sonar-scanner:
+  code-analysis:
     image: aosapps/drone-sonar-plugin
-    secrets: [sonar_host, sonar_token]
-    sources: iMXDemo
+    settings:
+        sonar_host:
+          from_secret: sonar_host
+        sonar_token:
+          from_secret: sonar_token
+        sources: iMXDemo
     when:
       event:
         - push
