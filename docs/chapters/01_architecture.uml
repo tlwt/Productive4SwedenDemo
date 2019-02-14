@@ -1,0 +1,32 @@
+@startuml
+title productive 4.0 Swedish Use-Case
+node Demo {
+    node ExchangeNetwork {
+
+    }
+
+    node GpsTracker {
+
+    }
+
+    node LiquidityForecast {
+        database Sql {
+
+        }
+
+        interface FunctionDatahandler {
+
+        }
+    }
+
+    node Autobahn {
+
+    }
+}
+
+GpsTracker --> Autobahn
+ExchangeNetwork --> Autobahn
+Sql <-- Autobahn
+
+
+@enduml
