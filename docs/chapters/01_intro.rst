@@ -2,10 +2,11 @@
 Introduction
 ##################
 
+
+
 Management summary
 ==================
-
-Goal of this repository is to provide access to the Swedish usecase demo
+Goal of this repository is to provide access to the Swedish usecase demo. The source for this document and the source code can be found at: https://github.com/tlwt/Productive4SwedenDemo
 
 About the Productive 4.0
 ===================

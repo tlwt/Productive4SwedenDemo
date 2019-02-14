@@ -1,3 +1,4 @@
 # Test for Drone and readthedocs
 
-* https://swedendemo.readthedocs.io/en/latest/
+
+[<img src="https://readthedocs.org/projects/swedendemo/badge/">](https://swedendemo.readthedocs.io/en/latest/)
