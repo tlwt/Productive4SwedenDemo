@@ -9,6 +9,11 @@ pipeline:
       event:
         - push
         - pull_request
+  gitter:
+    image: plugins/gitter
+    settings:
+      webhook:
+        from_secret: gitter_webhok
   slack: # pushing out notification
     image: plugins/slack:latest
     channel: dev
