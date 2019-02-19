@@ -47,7 +47,7 @@ Initalizing the crossbar node:
   
 The result should give an output like this:
 
-.. image:: images/crossbar.png
+.. image:: ../images/crossbar.png
   :width: 500px
   :height: 500px
   :align: center
