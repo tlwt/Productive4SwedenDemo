@@ -7,18 +7,18 @@ Downloading pip and crossbar:
 
 Download pip: 
 
-.. code-block:: 
+.. code-block:: none
 
-    apt install python3-pip
+    $ apt install python3-pip
     
-    python -m ensurepip
-    python -m pip install -U pip
+    $ python -m ensurepip
+    $ python -m pip install -U pip
 
 Install crossbar via pip3 (pyhthon3 is required):
 
-.. code-block:: 
+.. code-block:: none
 
-     pip3 install crossbar
+    $ pip3 install crossbar
 
 
 Installing autobahn.js via npm:
@@ -26,23 +26,23 @@ Installing autobahn.js via npm:
 
 Installing nodejs and npm: 
 
-.. code-block:: 
+.. code-block:: none
 
-    wget https://nodejs.org/dist/v6.10.1/node-v6.10.1-linux-x64.tar.xz
-    tar xvf node-v6.10.1-linux-x64.tar.xz
-    export PATH=${HOME}/node-v6.10.1-linux-x64/bin:${PATH}
-    export NODE_PATH=${HOME}/node-v6.10.1-linux-x64/lib/node_modules
+    $ wget https://nodejs.org/dist/v6.10.1/node-v6.10.1-linux-x64.tar.xz
+    $ tar xvf node-v6.10.1-linux-x64.tar.xz
+    $ export PATH=${HOME}/node-v6.10.1-linux-x64/bin:${PATH}
+    $ export NODE_PATH=${HOME}/node-v6.10.1-linux-x64/lib/node_modules
 
 Installing autobahn and websocket functionality: 
 
-.. code-block:: 
+.. code-block:: none
 
-    sudo npm install autobahn
-    sudo npm install ws@2
+    $ sudo npm install autobahn
+    $ sudo npm install ws@2
 
 Downloading crossbar libraries and autobahn.js repos:
 =====================================================
 
-.. code-block:: 
+.. code-block:: none
 
-    git clone https://github.com/crossbario/autobahn-js.git
+    $ git clone https://github.com/crossbario/autobahn-js.git
