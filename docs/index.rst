@@ -39,6 +39,7 @@ Project members (in alphabetical order)
    :caption: Contents:
 
    chapters/01_intro.rst
+   chapters/02_installing_crossbario.rst
    chapters/10_glossary.rst
 
 
