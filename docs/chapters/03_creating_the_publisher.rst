@@ -37,13 +37,16 @@ As seen in the image below (https://crossbar.io/static/img/gen/multi_protocol_on
   :height: 500px
   :align: center
   
+  
+  
 Initalizing the crossbar node: 
 ------------------------------
 
-.. code-block:: 
+.. code-block:: none
 
   $ crossbar init
   $ crossbar start
+  
   
 The result should give an output like this:
 
