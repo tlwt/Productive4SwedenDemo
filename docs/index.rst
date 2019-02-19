@@ -40,6 +40,7 @@ Project members (in alphabetical order)
 
    chapters/01_intro.rst
    chapters/02_installing_crossbario.rst
+   chapters/03_creating_the_publisher.rst
    chapters/10_glossary.rst
 
 
