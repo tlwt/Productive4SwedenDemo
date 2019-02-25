@@ -1,0 +1,25 @@
+{
+  "name": "productive4swedendemo",
+  "version": "1.0.0",
+  "description": "Demo for sedish collaboration within Productive 4.0 ",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tlwt/Productive4SwedenDemo.git"
+  },
+  "author": "Noah Winneberger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tlwt/Productive4SwedenDemo/issues"
+  },
+  "homepage": "https://github.com/tlwt/Productive4SwedenDemo#readme",
+  "dependencies": {
+    "autobahn": "^18.10.2"
+  }
+}
