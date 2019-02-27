@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="msapplication-tap-highlight" content="no">
+    <meta name="description" content="Continuous Delivery Home">
+    <title>Productive 4.0</title>
+    <link rel="stylesheet" href="css/seb_fonts.css">
+    <link rel="stylesheet" href="css/flexboxgrid.min.css">
+    <link rel="stylesheet" href="css/master.css">
+    <script src="js/d3.v5.min.js"></script>
+    <!-- blue: #0092e1-->
+    <style>
+        .map::before,
+        .analytics::before {
+            box-shadow: inset 0px 12px 24px -9px #000;
+            width: 100%;
+            height: 100%;
+            content: '';
+            display: block;
+            position: absolute;
+            z-index: 0;
+        }
+        
+        h1 {
+            font-size: 72px;
+            font-weight: 300;
+            letter-spacing: -0.03em;
+            line-height: 66px;
+            position: relative;
+            left: -7px;
+        }
+        
+        h2 {
+            font-weight: 400;
+            font-size: 40px;
+        }
+        
+        h3 {
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 33px;
+        }
+        
+        h4 {
+            font-weight: 400;
+            font-size: 21px;
+            line-height: 1.4em;
+            margin-bottom: 22px
+        }
+        
+        p {
+            font-size: 17px
+        }
+        
+        #live {
+            width: 90px;
+            height: 90px;
+            position: absolute;
+            top: -50px;
+            right: -30px
+        }
+        
+        .main .container {
+            width: 580px;
+            flex-wrap: nowrap;
+        }
+        
+        .map .container {
+            width: 600px;
+            flex-wrap: nowrap;
+        }
+        
+        .analytics .container {
+            width: 70%;
+            flex-wrap: nowrap;
+        }
+        
+        .preamble {
+            margin-top: 40px
+        }
+        
+        #path-skovde-gbg {
+            stroke: yellow;
+            stroke-width: 3px;
+            opacity: 0.4;
+            mix-blend-mode: overlay;
+        }
+        
+        #location,
+        #location2 {
+            fill: white;
+            opacity: 0.7;
+        }
+        
+        #satlink {
+            fill: rgb(255, 255, 240, .5);
+            mix-blend-mode: overlay;
+        }
+        
+        #bars {
+            margin-top: 50px;
+            width: 65%;
+        }
+        
+        .clouds {
+            position: absolute;
+            z-index: 30;
+            top: 300px;
+            left: 0;
+            width: 250.625em;
+            height: 43.75em;
+            -webkit-animation: cloudLoop 160s linear infinite;
+            animation: cloudLoop 160s linear infinite;
+            animation-name: cloudLoop;
+            animation-duration: 500s;
+            animation-timing-function: linear;
+            animation-delay: initial;
+            animation-iteration-count: infinite;
+            animation-direction: initial;
+            animation-fill-mode: initial;
+            animation-play-state: initial;
+        }
+        
+        @-webkit-keyframes cloudLoop {
+            0% {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0)
+            }
+            100% {
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0)
+            }
+        }
+        
+        @keyframes cloudLoop {
+            0% {
+                -webkit-transform: translate3d(0, 0, 0);
+                transform: translate3d(0, 0, 0)
+            }
+            100% {
+                -webkit-transform: translate3d(-100%, 0, 0);
+                transform: translate3d(-100%, 0, 0)
+            }
+        }
+        
+        .section_pad {
+            padding: 100px 0 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="main">
+        <div class="wrapper">
+            <div class="container">
+                <h1>Liquidity Forecasting<img id="live" src="img/live_logo.png"></h1>
+                <div class="preamble">
+                    <h3>Using GPS tracking and advanced probability analytics, we’re creating the next generation liquidity forecasting tool.</h3>
+                </div>
+                <div style="text-align:center">
+                    <img src="img/trans_bartest.png" id="bars">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="map">
+        <div class="section_pad">
+            <div class="container">
+                <h2>GPS Tracking</h2>
+                <div class="preamble">
+                    <h4>Volvo truck engines are transported from Skövde to Göteborg, where they will be installed into brand new Volvo trucks.</h4>
+                    <h4 style="width:70%">By adding a GPS transmitter to each engine carrier, Volvo can immediately detect delays and bottlenecks along the way and adapt accordingly.</h4>
+                    <div id="clouds" style="visibility: inherit; opacity: 1; background: url(img/clouds.png) 0px 100% repeat-x;"></div>
+                </div>
+            </div>
+        </div>
+        <div class="mapwrapper">
+            <svg id="map" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="763px" height="1100px">
+                <defs>
+                    <g id="location2"><g transform="translate(-25,-5) scale(0.0035,-0.0035)"><path d="M3923.6,3114.8c-15.2-11.4-26.6-877.1-26.6-1917.5V-693.6h-208.8h-208.8V673.3v1366.9l-1108.7-7.6l-1108.7-11.4l-580.9-907.5L100,202.5l7.6-1158.1L119-2117.5l611.3-11.4l611.3-7.6l26.6,155.7c30.4,189.9,148.1,436.7,284.8,577.1c292.4,319,854.3,413.9,1237.8,208.8c311.4-163.3,520.2-448,573.3-786l26.6-155.7h1925.1h1925.1l26.6,155.7c26.5,163.3,144.3,425.3,243,539.2c53.2,60.7-45.6,64.6-2035.2,64.6H3479.3v189.8v189.9h3208.5h3208.4l-7.6,2061.8l-11.4,2058l-2965.4,11.4C5282.9,3137.5,3935,3130,3923.6,3114.8z M3137.6,882.1V141.7h-1272c-1165.7,0-1272,3.8-1272,64.6c0,34.2,193.6,368.3,429.1,736.6l425.3,675.8l846.7,3.8h842.9V882.1z"/><path d="M2245.3-1384.7c-683.5-155.7-827.7-1066.9-224-1420.1c607.5-356.9,1336.5,212.6,1135.3,880.9C3038.9-1529,2640.2-1293.5,2245.3-1384.7z"/><path d="M8240.7-1373.3c-679.7-167-820.2-1082.1-220.3-1431.5c470.8-277.2,1078.4,11.4,1169.5,554.4C9273.5-1734,8749.5-1248,8240.7-1373.3z"/><path d="M9220.4-1441.6c98.7-113.9,216.4-375.9,243-543l26.6-155.7l193.7,11.4l193.6,11.4l11.4,372.1l11.4,368.3h-368.3C9182.4-1377.1,9167.2-1380.9,9220.4-1441.6z"/></g></g>
+                    <g id="location"><g transform="translate(-17,-20) scale(0.03)"><path d="M937.7,447.7h-33.2c-4.7-36.6-14.3-72.2-28.8-106.4c-20.5-48.5-50-92.2-87.4-129.6c-37.4-37.4-81-66.8-129.6-87.4c-34.2-14.4-69.8-24-106.4-28.7V62.3c0-28.9-23.4-52.3-52.3-52.3c-28.9,0-52.3,23.4-52.3,52.3v33.2c-36.6,4.7-72.2,14.3-106.4,28.7c-48.5,20.5-92.2,50-129.6,87.4c-37.4,37.4-66.8,81-87.4,129.6c-14.4,34.2-24,69.8-28.7,106.4H62.3C33.4,447.7,10,471.1,10,500s23.4,52.3,52.3,52.3h33.2c4.7,36.6,14.3,72.2,28.7,106.4c20.5,48.5,50,92.2,87.4,129.6c37.4,37.4,81,66.8,129.6,87.4c34.2,14.4,69.8,24,106.4,28.8v33.2c0,28.9,23.4,52.3,52.3,52.3c28.9,0,52.3-23.4,52.3-52.3v-33.2c36.6-4.7,72.2-14.3,106.4-28.8c48.5-20.5,92.2-50,129.6-87.4c37.4-37.4,66.8-81,87.4-129.6c14.4-34.2,24-69.8,28.8-106.4h33.2c28.9,0,52.3-23.4,52.3-52.3C990,471.1,966.6,447.7,937.7,447.7z M773.2,552.3h25.5c-10.6,61.1-39.6,117.4-84.4,162.1c-44.7,44.7-101,73.8-162.1,84.4v-25.5c0-28.9-23.4-52.3-52.3-52.3c-28.9,0-52.3,23.4-52.3,52.3v25.5c-61.1-10.6-117.4-39.6-162.1-84.4c-44.7-44.7-73.8-101-84.4-162.1h25.5c28.9,0,52.3-23.4,52.3-52.3c0-28.9-23.4-52.3-52.3-52.3h-25.5c10.6-61.1,39.6-117.4,84.4-162.1c44.7-44.7,101-73.8,162.1-84.4v25.5c0,28.9,23.4,52.3,52.3,52.3c28.9,0,52.3-23.4,52.3-52.3v-25.5c61.1,10.6,117.4,39.6,162.1,84.4c44.7,44.7,73.8,101,84.4,162.1h-25.5c-28.9,0-52.3,23.4-52.3,52.3S744.3,552.3,773.2,552.3z"/></g></g>
+                </defs>
+                <g transform="translate(430, 100)">
+                        <image xlink:href="img/satellite.png"/>
+                    </g>
+                <g id="mapgroup" transform="translate(0,200)">
+                        <image xlink:href="img/map.png"/>
+                        <path fill="none" id="path-skovde-gbg" d="M622,101.7l2.3-1.7l0.5,1l-2,1.5l0.8,0.5l5.8-5.2l1.3,2.7l-2.7,2.2l1.2,1l-2.7,2.2l1.3,2.2l2.5-2.8
+	c0,0,3.8,4.2,5.8,8.5c2,4.3,3.7,3.2,3.7,3.2l4,2.3c0,0,3.5,1.8,4.5,4.7c1,2.8,2.8,6.3,5.3,6.3s7.2,0.5,9.2,1.2
+	c2,0.7,6.8,2.8,7.8,3.8s2.8,3.7,4,5.2c1.2,1.5,5.3,6.3,6.5,6.3c1.2,0,4.8,1,3.8,5.3s-3.7,1.8-3.2,4.3s1.7,9.2-0.5,10.2
+	s-7.5,5.3-6.8,7.3c0.7,2-1.7,3.5-3.7,3.5s-1.2,8.5-1,8s1,4,0.3,5c-0.7,1-6,5.5-8,5.5s-6.5,0.7-6.5,1.3c0,0.7-3.7,4.2-3.5,6
+	c0.2,1.8-14.3,1.2-23.3,14.5l0.7,3.7l-11,4.3l-12,12.7c0,0-14.3,22.7-18.3,21.7s-14.7,12-15.7,12s5.3,5,5.3,5s14.3,0.3,13,3.3
+	s-0.7,7.3-0.3,12c0.3,4.7,4.3,4.7,4.3,8.3c0,3.7-2.7,14.7-4.7,14.3s-7.3,11.3-9.7,11.3c-2.3,0-3.7-0.3-7-0.3c-3.3,0-16-2.7-16,0
+	s-6.3,8.7-6.3,8.7l5.3,7.7l-0.7,19c0,0-2.7,9.7-4.3,9.7c-1.7,0-12,0-12,3.7c0,3.7,3.7,7.7,3.7,7.7l-0.7,6.3c0,0,9.7,1.7,10.7,4.7
+	s-3.3,10-3.3,10l3.7,7.3c0,0,2,10.7-5,10.7s-10,0.7-10,0.7l-1,3l-3.3,1l-4.7,1l2.3,3.3l-1.3,3L527,432l-3.3-0.7l-9-2.3l-2.3,4l1.7,3
+	l-3,2.7h-4.3v6.3l-1.3,5l-3.7,2.7l-3.3-2l3.7-1.7l2.7,5.7l-4.3,2l-3.3-2.3"/>
+                    <polygon id="satlink"/>
+</g>
+                    
+            </svg>
+        </div>
+    </section>
+
+    <section class="analytics">
+        <div class="section_pad">
+            <div class="container">
+                <h2>Forecasting</h2>
+                <div class="preamble">
+                    <h4>Stoppa in lite moln här. Volvo truck engines are transported from Skövde to Göteborg, where they will be installed into brand new Volvo trucks.</h4>
+                    <h4>By adding a GPS transmitter to each transport, Volvo can immediately detect delays and bottlenecks along the way and adapt accordingly.</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="page-footer">
+        <div class="footer-copyright">
+            <div class="container">
+                © 2019 Copyleft &mdash; use, modify and distribute freely
+            </div>
+        </div>
+    </footer>
+</body>
+<script>
+    var startPointRegEx = new RegExp(/(M[0-9,. ]+)/);
+    var g = d3.select("#mapgroup");
+    var path = d3.select("#path-skovde-gbg"),
+        startPoint = pathStartPoint(path);
+
+    var marker = g.append("use");
+    marker.attr("xlink:href", "#location2");
+
+    if (true) {
+        transition();
+        d3.select("#clouds").attr("class", "clouds");
+    }
+    // Get path start point for placing marker
+    function pathStartPoint(path) {
+        return startPointRegEx.exec();
+    }
+
+    function transition() {
+        marker.transition()
+            .duration(25000)
+            .attrTween("transform", translateAlong(path.node()))
+            .on("end", transition); // infinite loop
+    }
+
+    function translateAlong(path) {
+        var l = path.getTotalLength();
+        return function(i) {
+            return function(t) {
+                var p = path.getPointAtLength(t * l);
+                // <putmedownforthesakeofhumanity>
+                d3.select("#satlink").attr("points", function() {
+                    var sat = [604, -22];
+                    var p1 = [p.x - 10, p.y];
+                    var p2 = [p.x + 10, p.y];
+                    return sat.join() + " " + p1.join() + " " + p2.join();
+                });
+                // </putmedownforthesakeofhumanity>
+                return "translate(" + p.x + "," + p.y + ")"; //Move marker
+            }
+        }
+    }
+</script>
+
+</html>
