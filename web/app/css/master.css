@@ -32,10 +32,10 @@ body {
 .analytics {
     background-size: cover;
     background-position: 50% 0%;
-    background: url('../img/green.jpg') no-repeat;
+    background: url('../img/purple-bg.jpg') no-repeat;
     position: relative;
     height: 590px;
-    color: #111;
+    color: rgb(255, 246, 255);
 }
 
 .wrapper {
