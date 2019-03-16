@@ -75,7 +75,7 @@
         }
         
         .analytics .container {
-            width: 70%;
+            width: 600px;
             flex-wrap: nowrap;
         }
         
@@ -219,16 +219,41 @@
         <div class="infobox" style="position:relative; float:right; margin-right:400px; width:250px; z-index:2; left:60px; top:-200px; background:rgb(255,255,255,0.9); color: #222; padding:12px 10px 6px 20px; border: 2px solid #222;">
             <h5 style="line-height:1.2em">Supply-chain delays typically trigger a chain reaction of events, least of all financially.</h5>
         </div>
-        <div class="infobox" style="position:relative; float:right; margin-right:100px; width:250px; z-index:2; left:60px; top:70px; background:rgb(255,255,255,0.9); color: #222; padding:12px 10px 6px 20px; border: 2px solid #222;">
-            <h5 style="line-height:1.2em">Every truck has a buyer. By associating engine transports with their purchase orders, supply chain events immediately reflect on Volvo Treasury's liquidity forecast.</h5>
-        </div>
         <div class="section_pad">
-            <div class="container" style="font-size:0.3em !important">
+            <div class="container">
                 <h2 style="width:60%; line-height: 1em;">Liquidity Forecasting</h2>
+                <div class="preamble">
+                    <h4>Every truck has a buyer. By associating engine transports with their purchase orders, supply chain events immediately reflect on Volvo Treasury's liquidity forecast.</h4>
+                </div>
             </div>
-            <!--
-                bars
-            -->
+
+            <div class="graph" style="position:relative; left:20px; z-index:2">
+                <svg id="forecast" width="960" height="300">
+                        <defs>
+                                <linearGradient id="barGradient"
+                                                x1="0%" y1="0%"
+                                                x2="0%" y2="100%"
+                                                spreadMethod="pad">
+                                  <stop offset="0%"   stop-color="#eeeeee" stop-opacity="1"/>
+                                  <stop offset="100%" stop-color="#888888" stop-opacity="1"/>
+                                </linearGradient>
+                                <filter xmlns="http://www.w3.org/2000/svg" id="dropshadow" height="130%" width="200%">
+                                    <feGaussianBlur in="SourceAlpha" stdDeviation="8"/> 
+                                    <feOffset dx="5" dy="0" result="offsetblur"/>
+                                    <feComponentTransfer>
+                                      <feFuncA type="linear" slope="0.4"/>
+                                    </feComponentTransfer>
+                                    <feMerge> 
+                                      <feMergeNode/>
+                                      <feMergeNode in="SourceGraphic"/> 
+                                    </feMerge>
+                                  </filter>
+                                </defs>
+                                <polygon id="arrow" xmlns="http://www.w3.org/2000/svg" points="58.263,0.056 100,41.85 58.263,83.641 30.662,83.641 62.438,51.866 0,51.866 0,31.611 62.213,31.611 30.605,0 58.263,0.056" fill="#EEE" filter="url(#dropshadow)"/>
+                </svg>
+            </div>
+
+
         </div>
     </section>
 
@@ -243,12 +268,12 @@
 </body>
 <script>
     /***
-                                                                                                                                                                                                                                                 *
-                                                                                                                                                                                                                                                 *
-                                                                                                                                                                                                                                                todo:
-                                                                                                                                                                                                                                                    Scrolla mellan sidor
-                                                                                                                                                                                                                                                    
-                                                                                                                                                                                                                                                */
+                                                                                                                                                                                                                                                                                                                                                                                                         *
+                                                                                                                                                                                                                                                                                                                                                                                                         *
+                                                                                                                                                                                                                                                                                                                                                                                                        todo:
+                                                                                                                                                                                                                                                                                                                                                                                                            Scrolla mellan sidor
+                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                                                                                                        */
     var startPointRegEx = new RegExp(/(M[0-9,. ]+)/);
     var g = d3.select("#mapgroup");
     var path = d3.select("#path-skovde-gbg"),
@@ -310,6 +335,11 @@
                 }
                 var p = marker.direction > 0 ? path.getPointAtLength(t * l) : p = path.getPointAtLength(l - t * l);
 
+                if (Math.random() < 0.01) {
+                    movePayment(Math.random() * 5000, ~~(Math.random() * bardata.length), ~~(Math.random() * bardata.length))
+                    update_bars();
+                }
+
                 // <putmedownforthesakeofhumanity>
                 marker.satlink.attr("points", function() {
                     var sat = [604 - 20, 0];
@@ -321,6 +351,188 @@
             }
         }
     }
+</script>
+
+
+
+<style>
+    .graph {
+        text-align: center;
+    }
+    
+    div#title {
+        width: 880px;
+        margin: 10px auto 0;
+        padding: 5px 20px;
+        background-color: grey;
+        border: 1px solid grey;
+        color: white;
+        box-shadow: 3px 0px 3px lightgrey;
+    }
+    
+    .bartext {
+        fill: black;
+        opacity: 0.7;
+    }
+    
+    div#chart {
+        width: 920px;
+        margin: 0 auto 1em;
+        border: 1px solid grey;
+        box-shadow: 3px 3px 3px lightgrey;
+    }
+    
+    .bar.positive {
+        fill: url(#barGradient) #3d3f36;
+    }
+    
+    .bar.negative {
+        fill: #c56a6a;
+    }
+    
+    g.infowin {
+        fill: grey;
+    }
+    
+    g.infowin text,
+    .axis text {
+        font: 11px sans-serif;
+        fill: grey;
+    }
+    
+    .axis path,
+    .axis line {
+        fill: none;
+        stroke: #434343;
+        shape-rendering: crispEdges;
+    }
+    
+    path.domain {
+        stroke: none;
+    }
+    
+    .currency {
+        font-size: 24px !important;
+    }
+</style>
+<script>
+    var data = d3.map();
+    var currency = "EUR";
+</script>
+<script src="js/testdata.js"></script>
+<script>
+    generate(10);
+
+    // for formatting Korean Won
+    var d3f = d3.formatLocale({
+        decimal: ",",
+        thousands: " ",
+        currency: ["", " EUR"],
+        grouping: [3]
+    }).format("$,.01f");
+
+    function f(amount) {
+        return d3f(Math.round(amount / 100) * 100);
+    }
+
+    var svg = d3.select("#forecast"),
+        margin = {
+            top: 20,
+            right: 20,
+            bottom: 30,
+            left: 50
+        },
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    var x = d3.scaleTime().rangeRound([0, width]),
+        y = d3.scaleLinear().rangeRound([height, 0]);
+
+    var x_bar = d3.scaleBand().rangeRound([0, width]).domain(data.keys()).padding(.0);
+
+    var g = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(d3.extent(data.keys().map(d => new Date(d))));
+    y.domain(d3.extent(data.values().concat([0])));
+
+    var bardata = data.entries();
+
+    // axis
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    var y_axis = g.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y));
+
+    y_axis.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .text(currency);
+
+
+    var bars = g.selectAll(".bar")
+        .data(bardata)
+        .enter().append("g")
+        .lower()
+        .attr("filter", "url(#dropshadow)");;
+
+    bars.append("rect")
+        .data(bardata)
+        .attr("id", d => "d" + (new Date(d.key)).yyyymmdd())
+        .attr("class", "bar")
+        .attr("y", 0)
+        .attr("width", x_bar.bandwidth())
+        .attr("height", d => {
+            return d.value > 0 ? y(0) - y(d.value) : y(d.value) - y(0);
+            return Math.abs(y(d.value) - y(0));
+        });
+    // print amount on bars
+    bars.append("text")
+        .attr("class", "bartext")
+        .attr("dy", "-10")
+        .attr("dx", "10")
+        .attr("transform", "rotate(90)");
+
+    function update_bars() {
+        y.domain(d3.extent(data.values().concat([0])));
+        y_axis.call(d3.axisLeft(y))
+
+        bars
+            .transition()
+            .duration(500)
+            .attr("transform", d => {
+                return "translate(" + x_bar(new Date(d.key)) + "," + (d.value > 0 ? y(d.value) : y(0)) + ")";
+            });
+
+        bars.selectAll("rect")
+            .attr("class", d => d.value < 0 ? "bar negative" : "bar positive")
+            .transition()
+            .duration(500)
+            .attr("height", d => {
+                return d.value > 0 ? y(0) - y(d.value) : y(d.value) - y(0);
+                return Math.abs(y(d.value) - y(0));
+            });
+
+        bars.selectAll("text").text(d => f(d.value));
+    }
+
+    update_bars();
+
+    function movePayment(amount, fromIndex, toIndex) {
+
+        bardata[fromIndex].value = bardata[fromIndex].value - amount;
+        bardata[toIndex].value = bardata[toIndex].value + amount;
+    }
+
+
+    d3.select("#arrow").attr("transform", d => "translate(60,35)").style("opacity", "0.04")
+    svg.append("use").attr("xlink:href", "#arrow");
 </script>
 
 </html>

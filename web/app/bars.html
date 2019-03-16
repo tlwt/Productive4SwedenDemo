@@ -158,6 +158,9 @@
     x.domain(d3.extent(data.keys().map(d => new Date(d))));
     y.domain(d3.extent(data.values().concat([0])));
 
+    var bardata = data.entries();
+
+    // axis
     g.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
@@ -173,63 +176,71 @@
         .attr("text-anchor", "end")
         .text(currency);
 
+
     var bars = g.selectAll(".bar")
-        .data(data.entries())
+        .data(bardata)
         .enter().append("g")
         .lower()
-        .attr("transform", d => {
-            return "translate(" + x_bar(new Date(d.key)) + "," + (d.value > 0 ? y(d.value) : y(0)) + ")";
-        });
+        .attr("filter", "url(#dropshadow)");;
 
     bars.append("rect")
+        .data(bardata)
         .attr("id", d => "d" + (new Date(d.key)).yyyymmdd())
-        .attr("class", d => d.value < 0 ? "bar negative" : "bar positive")
-        //.attr("y", d => (d.value > 0 ? y(d.value) : y(0)))
+        .attr("class", "bar")
         .attr("y", 0)
-        .attr("width", 0)
+        .attr("width", x_bar.bandwidth())
         .attr("height", d => {
+            console.log(y(0) - y(d.value));
             return d.value > 0 ? y(0) - y(d.value) : y(d.value) - y(0);
             return Math.abs(y(d.value) - y(0));
-        })
-        .on("mouseover", function(d) {
-            d3.select("#date").text("Date: " + (new Date(d.key)).yyyymmdd());
-            d3.select("#amount").text(Math.round(d.value) + " " + currency);
-        })
-
+        });
+    // print amount on bars
     bars.append("text")
-        .text(d => f(d.value))
         .attr("class", "bartext")
         .attr("dy", "-10")
         .attr("dx", "10")
         .attr("transform", "rotate(90)");
 
-    g.selectAll(".bar")
-        .transition()
-        .ease(d3.easeElastic)
-        .delay((d, i) => i * 20)
-        .attr("width", x_bar.bandwidth())
-        .transition()
-        .attr("filter", "url(#dropshadow)");
+    function update_bars() {
+        bars
+            .transition()
+            .duration(200)
+            .attr("transform", d => {
+                return "translate(" + x_bar(new Date(d.key)) + "," + (d.value > 0 ? y(d.value) : y(0)) + ")";
+            });
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .append("line")
-        .attr("y1", y(0) + margin.top)
-        .attr("y2", y(0) + margin.top)
-        .attr("x1", margin.left)
-        .attr("x2", width);
+        bars.selectAll("rect")
+            .attr("class", d => d.value < 0 ? "bar negative" : "bar positive")
+            .transition()
+            .duration(200)
+            .attr("height", d => {
+                console.log(y(0) - y(d.value));
+                return d.value > 0 ? y(0) - y(d.value) : y(d.value) - y(0);
+                return Math.abs(y(d.value) - y(0));
+            });
 
-    svg.append("g")
-        .attr("class", "infowin")
-        .attr("transform", "translate(50, 10)")
-        .append("text")
-        .attr("id", "date");
+        bars.selectAll("text").text(d => f(d.value));
+    }
 
-    svg.append("g")
-        .attr("class", "infowin")
-        .attr("transform", "translate(150, 10)")
-        .append("text")
-        .attr("id", "amount");
+    update_bars();
+
+    function movePayment(amount, fromIndex, toIndex) {
+
+        bardata[fromIndex].value = bardata[fromIndex].value - amount;
+        bardata[toIndex].value = bardata[toIndex].value + amount;
+        /*
+        var fromKey = data.keys()[fromIndex],
+            toKey = data.keys()[toIndex];
+
+        var fromAmount = data.get(fromKey);
+        var toAmount = data.get(toKey);
+
+        data.set(fromKey, fromAmount - amount);
+        data.set(toKey, toAmount + amount);
+
+        */
+    }
+
 
     d3.select("#arrow").attr("transform", d => "translate(60,35)").style("opacity", "0.04")
     svg.append("use").attr("xlink:href", "#arrow");

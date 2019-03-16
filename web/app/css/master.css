@@ -18,7 +18,9 @@ body {
     background-position: 50% 0%;
     padding: 100px 0 10px 0;
     position: relative;
-    height: 590px;
+    min-height: 590px;
+    min-width: 100vw;
+    height: 100vh;
 }
 
 .map {
@@ -26,16 +28,17 @@ body {
     background-size: cover;
     background-position: 50% 0%;
     position: relative;
-    height: 700px;
+    height: 600px;
 }
 
 .analytics {
+    background: url('../img/purple-bg.jpg') no-repeat;
     background-size: cover;
     background-position: 50% 0%;
-    background: url('../img/purple-bg.jpg') no-repeat;
     position: relative;
-    height: 590px;
-    color: rgb(255, 246, 255);
+    min-height: 590px;
+    min-width: 100vw;
+    height: 100vh;
 }
 
 .wrapper {
