@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1170, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bank 4.0 Budapest Demonstrator</title>
+    <script src="js/d3.v5.min.js"></script>
+    <link rel="stylesheet" href="css/designlibrary.css">
+    <style type="text/css">
+        html,
+        body,
+        * {
+            background: #242424;
+            color: lightgray;
+        }
+        
+        .graph {
+            text-align: center;
+        }
+        
+        div#title {
+            width: 880px;
+            margin: 10px auto 0;
+            padding: 5px 20px;
+            background-color: grey;
+            border: 1px solid grey;
+            color: white;
+            box-shadow: 3px 0px 3px lightgrey;
+        }
+        
+        .bartext {
+            fill: white;
+            opacity: 0.7;
+        }
+        
+        h1 {
+            font-family: Georgia, serif;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            font-size: .8em;
+            font-weight: 100;
+            margin: .3em auto;
+        }
+        
+        div#chart {
+            width: 920px;
+            margin: 0 auto 1em;
+            border: 1px solid grey;
+            box-shadow: 3px 3px 3px lightgrey;
+        }
+        
+        .bar.positive {
+            fill: url(#barGradient) #3d3f36;
+        }
+        
+        .bar.negative {
+            fill: #473434;
+        }
+        
+        g.infowin {
+            fill: grey;
+        }
+        
+        g.infowin text,
+        .axis text {
+            font: 11px sans-serif;
+            fill: grey;
+        }
+        
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #434343;
+            shape-rendering: crispEdges;
+        }
+        
+        path.domain {
+            stroke: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="notes" style="margin-bottom: 200px">
+        Consider a candlestick graph: <a href="https://beta.observablehq.com/@mbostock/d3-candlestick-chart">https://beta.observablehq.com/@mbostock/d3-candlestick-chart</a>
+    </div>
+
+    <div class="graph">
+        <svg id="forecast" width="960" height="500">
+                <defs>
+                        <linearGradient id="barGradient"
+                                        x1="0%" y1="0%"
+                                        x2="0%" y2="100%"
+                                        spreadMethod="pad">
+                          <stop offset="0%"   stop-color="#cc0000" stop-opacity="1"/>
+                          <stop offset="100%" stop-color="#660000" stop-opacity="1"/>
+                        </linearGradient>
+                        <filter xmlns="http://www.w3.org/2000/svg" id="dropshadow" height="130%" width="200%">
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="8"/> 
+                            <feOffset dx="5" dy="0" result="offsetblur"/>
+                            <feComponentTransfer>
+                              <feFuncA type="linear" slope="0.4"/>
+                            </feComponentTransfer>
+                            <feMerge> 
+                              <feMergeNode/>
+                              <feMergeNode in="SourceGraphic"/> 
+                            </feMerge>
+                          </filter>
+                        </defs>
+                        <polygon id="arrow" xmlns="http://www.w3.org/2000/svg" points="58.263,0.056 100,41.85 58.263,83.641 30.662,83.641 62.438,51.866 0,51.866 0,31.611 62.213,31.611 30.605,0 58.263,0.056" fill="#EEE" filter="url(#dropshadow)"/>
+        </svg>
+    </div>
+</body>
+<script>
+    var data = d3.map();
+    var currency = "KRW";
+</script>
+<script src="js/testdata.js"></script>
+<script>
+    generate(30);
+
+    // for formatting Korean Won
+    var d3f = d3.formatLocale({
+        decimal: ",",
+        thousands: " ",
+        currency: ["", " KRW"],
+        grouping: [3]
+    }).format("$,.01f");
+
+    function f(amount) {
+        return d3f(Math.round(amount / 100) * 100);
+    }
+
+    var svg = d3.select("#forecast"),
+        margin = {
+            top: 20,
+            right: 20,
+            bottom: 30,
+            left: 50
+        },
+        width = +svg.attr("width") - margin.left - margin.right,
+        height = +svg.attr("height") - margin.top - margin.bottom;
+
+    var x = d3.scaleTime().rangeRound([0, width]),
+        y = d3.scaleLinear().rangeRound([height, 0]);
+
+    var x_bar = d3.scaleBand().rangeRound([0, width]).domain(data.keys()).padding(.0);
+
+    var g = svg.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    x.domain(d3.extent(data.keys().map(d => new Date(d))));
+    y.domain(d3.extent(data.values().concat([0])));
+
+    var bardata = data.entries();
+
+    // axis
+    g.append("g")
+        .attr("class", "axis axis--x")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x));
+
+    g.append("g")
+        .attr("class", "axis axis--y")
+        .call(d3.axisLeft(y))
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", "0.71em")
+        .attr("text-anchor", "end")
+        .text(currency);
+
+
+    var bars = g.selectAll(".bar")
+        .data(bardata)
+        .enter().append("g")
+        .lower()
+        .attr("filter", "url(#dropshadow)");;
+
+    bars.append("rect")
+        .data(bardata)
+        .attr("id", d => "d" + (new Date(d.key)).yyyymmdd())
+        .attr("class", "bar")
+        .attr("y", 0)
+        .attr("width", x_bar.bandwidth())
+        .attr("height", d => {
+            console.log(y(0) - y(d.value));
+            return d.value > 0 ? y(0) - y(d.value) : y(d.value) - y(0);
+            return Math.abs(y(d.value) - y(0));
+        });
+    // print amount on bars
+    bars.append("text")
+        .attr("class", "bartext")
+        .attr("dy", "-10")
+        .attr("dx", "10")
+        .attr("transform", "rotate(90)");
+
+    function update_bars() {
+        bars
+            .transition()
+            .duration(200)
+            .attr("transform", d => {
+                return "translate(" + x_bar(new Date(d.key)) + "," + (d.value > 0 ? y(d.value) : y(0)) + ")";
+            });
+
+        bars.selectAll("rect")
+            .attr("class", d => d.value < 0 ? "bar negative" : "bar positive")
+            .transition()
+            .duration(200)
+            .attr("height", d => {
+                console.log(y(0) - y(d.value));
+                return d.value > 0 ? y(0) - y(d.value) : y(d.value) - y(0);
+                return Math.abs(y(d.value) - y(0));
+            });
+
+        bars.selectAll("text").text(d => f(d.value));
+    }
+
+    update_bars();
+
+    function movePayment(amount, fromIndex, toIndex) {
+
+        bardata[fromIndex].value = bardata[fromIndex].value - amount;
+        bardata[toIndex].value = bardata[toIndex].value + amount;
+        /*
+        var fromKey = data.keys()[fromIndex],
+            toKey = data.keys()[toIndex];
+
+        var fromAmount = data.get(fromKey);
+        var toAmount = data.get(toKey);
+
+        data.set(fromKey, fromAmount - amount);
+        data.set(toKey, toAmount + amount);
+
+        */
+    }
+
+
+    d3.select("#arrow").attr("transform", d => "translate(60,35)").style("opacity", "0.04")
+    svg.append("use").attr("xlink:href", "#arrow");
+</script>
+
+</html>
