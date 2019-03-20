@@ -1,0 +1,36 @@
+debug = false
+logLevel = "ERROR"
+
+defaultEntryPoints = ["http", "https"]
+
+[web]
+# Port for the status/dashboard page
+address = ":8080"
+[web.auth.basic]
+  users = ["admin:$apr1$gmFCM8iU$xb3HAz4K.fQHW89NFpIeU."]
+
+[entryPoints]
+    [entryPoints.http]
+    address = ":80"
+        [entryPoints.http.redirect]
+        entryPoint = "https"
+
+    [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "*.distributedleder.systems"
+watch = true
+exposedByDefault = false
+
+[acme]
+email = "winneberger@consider-it.de"
+storage = "acme.json"
+entryPoint = "https"
+onHostRule = true
+    [acme.httpChallenge]
+    entryPoint = "http"
