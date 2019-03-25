@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1170, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Bank 4.0 Budapest Demonstrator</title>
+    <script src="js/d3.v5.min.js"></script>
+    <link rel="stylesheet" href="css/designlibrary.css">
+    <script src="bower_components/autobahn/autobahn.min.js"></script>
+    <style type="text/css">
+        html {
+            background-color: #242424;
+            color: lightgray;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="notes" style="margin: 50px; border: 1px dashed gray; height:200px; font-family: monospace">
+
+    </div>
+</body>
+<script>
+    var connection = new autobahn.Connection({
+        url: 'ws://autobahn.distributedledger.systems:9000/ws',
+        realm: 'realm1'
+    });
+
+    connection.onopen = function(session) {
+
+        // 1) subscribe to a topic
+        function onevent(args) {
+            console.log("Event:", args[0]);
+        }
+        session.subscribe('com.myapp.hello', onevent);
+
+        // 2) publish an event
+        session.publish('com.myapp.hello', ['Hello, world!']);
+
+        // 3) register a procedure for remoting
+        function add2(args) {
+            return args[0] + args[1];
+        }
+        session.register('com.myapp.add2', add2);
+
+        // 4) call a remote procedure
+        session.call('com.myapp.add2', [2, 3]).then(
+            function(res) {
+                console.log("Result:", res);
+            }
+        );
+    };
+
+    connection.open();
+</script>
+
+</html>
