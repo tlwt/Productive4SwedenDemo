@@ -1,0 +1,19 @@
+{
+  "name": "erc-20-token-balance",
+  "version": "1.0.0",
+  "description": "This is an extension of the [\"Hello World\" project](https://github.com/shawntabrizi/ETH-Balance) for Ethereum and Web3.js which allows you to query the ERC-20 token balance of an Ethereum address.",
+  "main": "erc20balance.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shawntabrizi/ERC-20-Token-Balance.git"
+  },
+  "author": "Noah Winneberger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shawntabrizi/ERC-20-Token-Balance/issues"
+  },
+  "homepage": "https://github.com/shawntabrizi/ERC-20-Token-Balance#readme"
+}

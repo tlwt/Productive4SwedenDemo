@@ -1,0 +1,15 @@
+{
+  "name": "unxisocketdemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Noah Winneberger",
+  "license": "ISC",
+  "dependencies": {
+    "net": "^1.0.2",
+    "web3": "^1.0.0-beta.37"
+  }
+}
