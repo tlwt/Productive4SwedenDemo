@@ -12,10 +12,18 @@ net -- version 1.0.2
 ````
 
 
-## Running the script
+## Running the script (JavaScript and nodejs)
 
 ````
 $ cd unixSocketDemo
 $ nodemon blockchainSocket.js
 $ nodemon client.js
+````
+
+## Running the script (Python)
+
+````
+$ cd unixSocketDemo/imsSocketDemo
+$ pyhton kukaDemo.py
+$ pyhton client.py
 ````
