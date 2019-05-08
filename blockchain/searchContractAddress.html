@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <label id="contract_address">Contract Address: </label>
+    <div id="bar"></div>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js"
+        integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        /*************************************************************************************
+         *
+         * Workaround for finding smart contract address by filtering previous 10 Blocks
+         * for smart contract addresses within transaction receipts
+         *
+         *************************************************************************************/
+
+        //const Web3 = require('web3');
+        //const config = require('config');
+
+        const web3 = new Web3(new Web3.providers.WebsocketProvider("ws://89.144.27.100:8484"));
+
+        var TRANSACTION_ID;
+        var BLOCK_LATEST;
+
+        function createUL(TRANSACTION_ID) {
+            /* Create the list element: */
+            var list = document.createElement('ul');
+            /* Create the list item: */
+            var item = document.createElement('li');
+
+            /* Set its contents: */
+            item.appendChild(document.createTextNode(TRANSACTION_ID));
+
+            /* Add it to the list: */
+            list.appendChild(item);
+
+            /* Return the constructed list: */
+            return list;
+        }
+
+        function getContractAddress() {
+            web3.eth.getBlockNumber(function (error, result) {
+                if (!error) {
+                    BLOCK_LATEST = result;
+                    var list = document.createElement('ul');
+                    for (var i = 0; i < 10; i++) {
+                        // console.log(BLOCK_LATEST);  // for debugging purposes
+                        BLOCK_LATEST -= i;
+                        web3.eth.getBlock(BLOCK_LATEST, function (error, result) {
+                            if (!error) {
+                                console.log(JSON.stringify(result.transactions.toString('hex')));
+                                TRANSACTION_ID = JSON.stringify(result.transactions.toString('hex'));
+                                /* Add the contents of TX_ID to #bar: */
+                                document.getElementById('bar').appendChild(createUL(TRANSACTION_ID));
+                            } else {
+                                console.error(error);
+                            }
+                        });
+                    }
+                } else {
+                    console.error(error);
+                }
+            });
+        };
+
+        function getContractReceipt() {
+            // getting the tx id receipt and output contract address
+            var transaction = document.getElementById('txid').value;
+            console.log(transaction);
+            web3.eth.getTransactionReceipt(transaction, function (error, result) {
+                if (!error) {
+                    console.log(JSON.stringify(result.contractAddress.toString('hex')));
+                    document.getElementById('contract_address').innerHTML = "Contract Address: " + JSON
+                        .stringify(result.contractAddress.toString('hex'));
+                } else {
+                    console.error(error);
+                }
+            });
+        }
+    </script>
+
+    <h2>Get the list of the past 10 Transactions</h2>
+    <button type="button" onclick="getContractAddress();">Click Me!</button>
+    <h2>Get the Contract address</h2>
+    <input id="txid" type="text" placeholder="TRANSACTION_ID"><br>
+    <button type="button" onclick="getContractReceipt();">Get Transaction Receipt!</button>
+</body>
+
+</html>
