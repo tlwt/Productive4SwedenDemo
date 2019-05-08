@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/tlwt/Productive4SwedenDemo#readme",
   "dependencies": {
-    "autobahn": "^18.10.2"
+    "autobahn": "^18.10.2",
+    "web3": "^1.0.0-beta.52"
   }
 }

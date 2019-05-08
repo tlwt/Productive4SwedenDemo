@@ -9,41 +9,16 @@ const config = require("./config/config");
 const net = require("net"),
     port = 5000,
     unixsocket = "/tmp/blockchainSocket.sock";
-var ACCOUNT_BALANCE;
-
-/*******************************************
- *
- *   Blockchain interface and SC Data
- *
- ********************************************/
-
-const web3 = new Web3(
-    new Web3.providers.WebsocketProvider("ws://89.144.27.100:8484")
-);
-
-var OZ_ERC20Token = new web3.eth.Contract(
-    config.JSON_INTERFACE,
-    config.CONTRACT_ADDRESS
-);
-//console.log(OZ_ERC20Token);
-OZ_ERC20Token.options.defaultAccount = config.CONTRACT_ACCOUNT;
-
-OZ_ERC20Token.methods
-    .balanceOf(config.CONTRACT_ACCOUNT)
-    .call()
-    .then(function (r, e) {
-        if (!e) {
-            // console.log(JSON.stringify(r));
-            ACCOUNT_BALANCE = r;
-            console.log(ACCOUNT_BALANCE);
-        } else console.error(e);
-    });
+const zerorpc = require("zerorpc");
 
 /*******************************************
  *
  *   Socket Interface for Robot communication
  *
  ********************************************/
+
+var client = new zerorpc.Client();
+client.connect("tcp://89.144.27.100:4242");
 
 var log = function (who, what) {
     return function () {
@@ -58,6 +33,13 @@ var echo = function (socket) {
      *  events: end, data, end, timeout, drain, error, close
      *  methods:
      */
+    client.invoke("checkBalance", function (error, res, more) {
+        console.log(res);
+        if (res == "1000000000000000000000000") {
+            socket.write("blockchainConfirmation\n");
+            console.log("Blockchain confirmation received, executing Demo");
+        }
+    });
     socket.on("end", function () {
         // exec'd when socket other end of connection sends FIN packet
         console.log("[socket on end]");
@@ -101,17 +83,25 @@ server.on("listening", function () {
             ad.family
         );
     }
+    client.invoke("checkBalance", function (error, res, more) {
+        console.log("The current Balance of your account: " + res);
+        if (res == "1000000000000000000000000") {
+            //   socket.write("blockchainConfirmed\n");
+        }
+    });
 });
 
 server.on("connection", function (socket) {
     server.getConnections(function (err, count) {
-        console.log("%d open connections!", count, ACCOUNT_BALANCE);
+        console.log("%d open connections!", count);
     });
-    // for debugging
+
+    // socket.write('blockchainConfirmed\n');
+    // // for debugging
     // socket.write(ACCOUNT_BALANCE);
-    if (ACCOUNT_BALANCE == "1000000000000000000000000") {
-        socket.write("blockchainConfirmed\n");
-    }
+    // if (ACCOUNT_BALANCE == "1000000000000000000000000") {
+    //     socket.write("blockchainConfirmed\n");
+    // }
 });
 
 server.on("close", function () {

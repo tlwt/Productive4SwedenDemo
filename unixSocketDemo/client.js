@@ -12,5 +12,6 @@ client.on("connect", function () {
 });
 
 client.on("data", function (data) {
-
+    console.log("Received current Balance: " + data);
+    client.destroy();
 });
