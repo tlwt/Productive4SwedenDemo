@@ -40,7 +40,6 @@ function advanceContractState(contract) {
         .then((error, result) => {
             if (!error) {
                 console.log('advanceContractState then ' + JSON.stringify(result));
-                console.log(STATE_CONTRACT.status);
                 // INFO: all events are handled by the registered event handler
                 // only do the error handling here
             } else {
