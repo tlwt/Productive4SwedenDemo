@@ -5,7 +5,7 @@
  *
  */
 const Web3 = require("web3");
-const config = require("./config/config");
+const config = require("../../config/config");
 const net = require("net"),
     port = 5000,
     unixsocket = "/tmp/blockchainSocket.sock";
@@ -29,6 +29,8 @@ var OZ_ERC20Token = new web3.eth.Contract(
 );
 //console.log(OZ_ERC20Token);
 OZ_ERC20Token.options.defaultAccount = config.CONTRACT_ACCOUNT;
+
+console.log(OZ_ERC20Token.options);
 
 OZ_ERC20Token.methods
     .balanceOf(config.CONTRACT_ACCOUNT)
