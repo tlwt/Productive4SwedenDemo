@@ -27,7 +27,7 @@ print >> sys.stderr, 'starting up on %s' % server_address
 sock.bind(server_address)
 
 # function calling the zerorpc socket function for calling the web3 interaction
-print(c.checkBalance())
+print(c.setStateToDelivery())
 
 sock.listen(1)
 
