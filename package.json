@@ -2,7 +2,6 @@
   "name": "productive4swedendemo",
   "version": "1.0.0",
   "description": "Demo for sedish collaboration within Productive 4.0 ",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },

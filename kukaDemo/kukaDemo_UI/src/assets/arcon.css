@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Arcon';
+  font-style: normal;
+  font-weight: normal;
+  src:
+    local('Arcon'),
+    url('./Arcon-Regular.woff2') format('woff2'), /* Super Modern Browsers */
+    url('./Arcon-Regular.woff') format('woff'); /* Modern Browsers */
+}
+

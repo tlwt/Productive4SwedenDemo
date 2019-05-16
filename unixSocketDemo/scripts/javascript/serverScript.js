@@ -11,6 +11,11 @@ var Web3 = require("web3");
 var zerorpc = require("zerorpc");
 var config = require("../../config/config");
 
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
 var currentState = "";
 
 /**
@@ -229,7 +234,72 @@ var server = new zerorpc.Server({
   }
 });
 
+/**
+ * Browser UI communication
+ */
+
+// serve the pre-built ui application
+app.use(express.static(config.STATIC_FILES));
+
+// FAKE: emit event steps every xx ms
+function walkThrough(socket, step) {
+  const timeout = 1000;
+  let reset = false;
+  let nextStep = () => {
+    socket.emit('data', {
+      step: step,
+      timestamp: reset ? null : new Date()
+    });
+    console.log({
+      step: step,
+      timestamp: new Date()
+    });
+    if (step == 0 && reset) {
+      reset = false;
+    } else {
+      step = step + 1;
+    }
+    if (step > 5) {
+      step = 0;
+      reset = true;
+    }
+    setTimeout(nextStep, timeout);
+  }
+  setTimeout(nextStep, timeout);
+}
+
+function initBrowserCommunication() {
+  //---------------------------
+  // communication with browser
+  //---------------------------
+  io.on('connection', socket => {
+    console.log('new connection');
+    if (CONTRACT) {
+      emitContract(socket, CONTRACT);
+    }
+    // debug
+    // walkThrough(socket, 0);
+
+    //--------------------
+    // client places order
+    //--------------------
+    socket.on('place order', () => {
+      console.log('order placed');
+      createNewContract();
+      ackMsg(socket, 'place order');
+    });
+
+    socket.on('advance', state => {
+      console.log('advance');
+      advanceContractState(state, CONTRACT);
+      ackMsg(socket, 'advance');
+    });
+  });
+};
+
 server.bind("tcp://0.0.0.0:4242");
+http.listen(config.PORT, () => console.log('Last Mile app listening on port http://localhost:3000/'));
+initBrowserCommunication();
 
 //TODO: make the functions exportable via zerorpc
 //TODO: create client and ui application

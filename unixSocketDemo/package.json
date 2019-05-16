@@ -2,14 +2,15 @@
   "name": "unxisocketdemo",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "nodemon ./scripts/javascript/serverScript.js"
   },
   "author": "Noah Winneberger",
   "license": "ISC",
   "dependencies": {
     "net": "^1.0.2",
+    "scripts": "^0.1.0",
     "web3": "^1.0.0-beta.37"
   }
 }
