@@ -16,9 +16,11 @@
         </div>
         <div class="row">
             <div class="col headerL"><img class="logo" src="./assets/chainstep.svg">
+            <!--
             <h3 class="indentL title">Reliability on the Last Mile</h3>
+            -->
             </div>
-            <div class="col headerR"><img class="logo" src="./assets/Mindchains_PB.svg"></div>
+            <!-- <div class="col headerR"><img class="logo" src="./assets/Mindchains_PB.svg"></div> -->
         </div>
         <div class="row indentL">
             <div class="col col-sm-3 headerL">
@@ -197,9 +199,9 @@ export default {
     --bubble-icon-size: 1.3rem;
     --bubble-size: 5rem;
     --bubble-line-top: 2.5rem;
-    --chainstep-blue: #122f5f;
-    --chainstep-light-blue: #4387a9;
-    --chainstep-grey20: #c8c8c8;
+    --chainstep-blue: rgb(200, 209, 68);
+    --chainstep-light-blue: rgb(244, 184, 64);
+    --chainstep-grey20: rgb(110, 170, 216);
 }
 
 .title {
@@ -272,7 +274,7 @@ export default {
     }
 
     .logo {
-        width: 90%;
+        width: 30%;
     }
 
     .headerR .logo {
@@ -288,7 +290,7 @@ export default {
     }
 
     .logo {
-        width: 80%;
+        width: 30%;
     }
 
     .headerR .logo {
