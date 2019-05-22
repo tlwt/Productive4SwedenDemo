@@ -8,15 +8,17 @@ print("#	Socket script for Blockchain to KUKA interaction	 #")
 print("#														 #")
 print("###########################################################")
 
+# defining global index for capturing the states
 
-#c = zerorpc.Client()
-# c.connect("tcp://89.144.27.100:4242")
-# print c.advanceContract(4)
+
+c = zerorpc.Client()
+c.connect("tcp://127.0.0.1:4242")
+print('Successful connection to the zerorpc server!')
 
 # crating the unix domain socket in order to start the Kuka demo applications
 
 
-def waitingForConnection(sock):
+def waitingForConnection(sock, state):
     while True:
         print >> sys.stderr, 'waiting for a connection'
         connection, client_address = sock.accept()
@@ -24,15 +26,20 @@ def waitingForConnection(sock):
             print >> sys.stderr, 'connection from', client_address
             while True:
                 connection.send('blockchainConfirmed')
+                print c.advanceContract(state)
             else:
                 print >> sys.stderr, 'no more confirmation possible', client_address
                 break
         finally:
             print('All information was sent, waiting for new connection...')
-            newConnection()
+            newConnection(state+1)
 
 
-def newConnection():
+def newConnection(_state):
+    if _state == 5:
+        print('The smart contract has been fulfilled, shutting down connections...')
+        sys.exit()
+    print('The current state of the Smart Contract: ', _state)
     server_address = '/tmp/blockchainSocket.sock'
     try:
         os.unlink(server_address)
@@ -43,13 +50,10 @@ def newConnection():
     print >> sys.stderr, 'starting up on %s' % server_address
     sock.bind(server_address)
     sock.listen(1)
-    waitingForConnection(sock)
+    waitingForConnection(sock, _state)
 
 
-newConnection()
+newConnection(1)
 
 
-# TODO: ensure the socket stays open for incoming connections. currently still breaking after initial client response
-# TODO: client application for testing the reliability of the socket connection
-# TODO: set timeout or interval function to allow for continuous calling of the advance function
-# TODO: optimally with counter and check for unix domain socket, write in the confirmation on contract creation
+# TODO: configure the zerorpc functionality, interval function for checking the current status, and on change call the next one

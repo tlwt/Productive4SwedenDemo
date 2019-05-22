@@ -58,12 +58,12 @@ export default {
             contract: {
                 address: null,
                 steps: [
-                    {timestamp: null, text: 'Order placed'},
-                    {timestamp: null, text: 'Delivery service selected'},
-                    {timestamp: null, text: 'Parcel code registered'},
-                    {timestamp: null, text: 'Delivery'},
-                    {timestamp: null, text: 'Delivery service on site'},
-                    {timestamp: null, text: 'Parcel delivered'}
+                    {timestamp: null, text: 'Order Placed'},
+                    {timestamp: null, text: 'Smart Contract Confirmed'},
+                    {timestamp: null, text: 'Processing Order'},
+                    {timestamp: null, text: 'Order Finalization'},
+                    {timestamp: null, text: 'Order Completed'},
+                    {timestamp: null, text: 'Contract Resolved'}
                 ]
             },
             socket: io()

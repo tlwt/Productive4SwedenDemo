@@ -170,12 +170,12 @@ function advanceContractState(state, contract) {
         return;
     }
     let methods = [
-        {"method": contract.methods.setStatusOrdered, "from": config.ACCOUNT_CUSTOMER, "args": [config.ACCOUNT_SELLER]},
-        {"method": contract.methods.setStatusToSelected, "from": config.ACCOUNT_SELLER, "args": [config.ACCOUNT_DELIVERYSERVICE]},
-        {"method": contract.methods.setStatusToRegistered, "from": config.ACCOUNT_DELIVERYSERVICE, "args": []},
-        {"method": contract.methods.setStatusToDelivery, "from": config.ACCOUNT_DELIVERYSERVICE, "args": []},
-        {"method": contract.methods.setStatusToOnSite, "from": config.ACCOUNT_DELIVERYSERVICE, "args": []},
-        {"method": contract.methods.setStatusToReceived, "from": config.ACCOUNT_CUSTOMER, "args": []}
+        {"method": contract.methods.setStatusOrdered, "from": config.MINER_NODE, "args": [config.MINER_NODE]},
+        {"method": contract.methods.setStatusToSelected, "from": config.MINER_NODE, "args": [config.MINER_NODE]},
+        {"method": contract.methods.setStatusToRegistered, "from": config.MINER_NODE, "args": []},
+        {"method": contract.methods.setStatusToDelivery, "from": config.MINER_NODE, "args": []},
+        {"method": contract.methods.setStatusToOnSite, "from": config.MINER_NODE, "args": []},
+        {"method": contract.methods.setStatusToReceived, "from": config.MINER_NODE, "args": []}
     ];
     if (state < methods.length) {
         let m = methods[state];
