@@ -21,7 +21,7 @@ serverSocket.listen(1)
 conn, addr = serverSocket.accept()
 while 1:
     data = conn.recv(1024)
-    print socketClient.advanceContract(1)
+    print socketClient.advanceContract()
     if not data:
         break
     conn.sendall(data)

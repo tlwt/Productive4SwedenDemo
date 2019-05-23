@@ -346,13 +346,13 @@ CONTRACT_COMPILED = compileContract(config.CONTRACT);
 initBrowserCommunication();
 
 var server = new zerorpc.Server({
-  advanceContract: function advanceContract(state, reply) {
-    advanceContractState(state, CONTRACT);
-    advanceContractState(state + 1, CONTRACT);
-    advanceContractState(state + 2, CONTRACT);
-    advanceContractState(state + 3, CONTRACT);
+  advanceContract: function advanceContract(reply) {
+    advanceContractState(1, CONTRACT);
+    advanceContractState(2, CONTRACT);
+    advanceContractState(3, CONTRACT);
+    advanceContractState(4, CONTRACT);
 
-    reply("Transaction confirmed... Processing Order!");
+    reply(null, "Transaction confirmed... Processing Order!");
   }
 });
 
