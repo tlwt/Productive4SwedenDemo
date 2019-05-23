@@ -1,20 +1,22 @@
-const config = require('./config/config.js');
-const express = require('express');
+const config = require("./config/config.js");
+const express = require("express");
 const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const zerorpc = require('zerorpc');
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+const zerorpc = require("zerorpc");
 
-const fs = require('fs');
-const solc = require('solc');
-const Web3 = require('web3');
+const fs = require("fs");
+const solc = require("solc");
+const Web3 = require("web3");
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider("ws://89.144.27.100:8484"));
+const web3 = new Web3(
+  new Web3.providers.WebsocketProvider("ws://89.144.27.100:8484")
+);
 //const zmq = require('zeromq');
 
-console.log('customer ' + config.ACCOUNT_CUSTOMER);
-console.log('seller ' + config.ACCOUNT_SELLER);
-console.log('delivery ' + config.ACCOUNT_DELIVERYSERVICE);
+console.log("customer " + config.ACCOUNT_CUSTOMER);
+console.log("seller " + config.ACCOUNT_SELLER);
+console.log("delivery " + config.ACCOUNT_DELIVERYSERVICE);
 
 // global instance of the one contract that's active
 var CONTRACT;
@@ -22,7 +24,10 @@ var CONTRACT_COMPILED;
 var TRANSACTION_GAS = 1000000;
 
 // unlocking config and functional account
-web3.eth.personal.importRawKey("eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8", "nxppoachain");
+web3.eth.personal.importRawKey(
+  "eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8",
+  "nxppoachain"
+);
 web3.eth.personal.unlockAccount(config.MINER_NODE, "nxppoachain");
 
 //var TRUCK = zmq.socket('rep');
@@ -44,23 +49,23 @@ NFC_TAGS_TO_STATE[TAG_HOME] = STATE_HOME;
 
 var CALLBACKS = [];
 function setNewContract(contract) {
-    console.log('setting new contract')
-    CONTRACT = contract;
-    if (CALLBACKS) {
-        CALLBACKS.forEach(v => {
-            console.log('calling callback');
-            v(contract);
-        });
-    }
+  console.log("setting new contract");
+  CONTRACT = contract;
+  if (CALLBACKS) {
+    CALLBACKS.forEach(v => {
+      console.log("calling callback");
+      v(contract);
+    });
+  }
 }
 
 function setNewContractRegister(func) {
-    if (!CALLBACKS) {
-        CALLBACKS = [];
-    }
+  if (!CALLBACKS) {
+    CALLBACKS = [];
+  }
 
-    CALLBACKS.push(func);
-    return CALLBACKS;
+  CALLBACKS.push(func);
+  return CALLBACKS;
 }
 
 // serve the pre-built ui application
@@ -68,248 +73,287 @@ app.use(express.static(config.STATIC_FILES));
 
 // FAKE: emit event steps every xx ms
 function walkThrough(socket, step) {
-    const timeout = 1000;
-    let reset = false;
-    let nextStep = () => {
-        socket.emit('data', {step: step, timestamp: reset ? null : new Date()});
-        console.log({step: step, timestamp: new Date()});
-        if (step == 0 && reset) {
-            reset = false;
-        } else {
-            step = step + 1;
-        }
-        if (step > 5) {
-            step = 0;
-            reset = true;
-        }
-        setTimeout(nextStep, timeout);
+  const timeout = 1000;
+  let reset = false;
+  let nextStep = () => {
+    socket.emit("data", { step: step, timestamp: reset ? null : new Date() });
+    console.log({ step: step, timestamp: new Date() });
+    if (step == 0 && reset) {
+      reset = false;
+    } else {
+      step = step + 1;
+    }
+    if (step > 5) {
+      step = 0;
+      reset = true;
     }
     setTimeout(nextStep, timeout);
+  };
+  setTimeout(nextStep, timeout);
 }
 
 function isWeb3Connected() {
-    return web3.accounts.length > 0;
+  return web3.accounts.length > 0;
 }
 
 function compileContract(contract) {
-    let input = fs.readFileSync(String(contract));
-    let output = solc.compile(input.toString(), 1);
-    if (output.errors) {
-        throw(output.errors);
-    }
-    return output.contracts[':OrderContract'];
+  let input = fs.readFileSync(String(contract));
+  let output = solc.compile(input.toString(), 1);
+  if (output.errors) {
+    throw output.errors;
+  }
+  return output.contracts[":OrderContract"];
 }
 
-let deployContract = (socket, compiled_contract) => new Promise(resolve => {
-    console.log('deployContract');
+let deployContract = (socket, compiled_contract) =>
+  new Promise(resolve => {
+    console.log("deployContract");
     const bytecode = compiled_contract.bytecode;
     const abi = JSON.parse(compiled_contract.interface);
 
     let contract = new web3.eth.Contract(abi);
 
-    console.log('deploying contract from: ' + config.ACCOUNT_CUSTOMER);
-    contract.deploy({data: '0x' + bytecode})
-        .send({
-            from: config.ACCOUNT_CUSTOMER,
-            gas: TRANSACTION_GAS})
-        .on('error', error => {
-            console.error(error);
-        })
-        .on('transactionHash', hash => {
-            console.log('transactionHash ' + hash);
-            ackMsg(socket, hash)
-        })
-        .on('receipt', receipt => {
-            console.log('receipt received ' + receipt.contractAddress);
-            console.log(receipt);
-        })
-        .on('confirmation', (confirmationNumber, receipt) => {
-            // debug
-            // console.log('confirmation received ' + receipt.contractAddress);
-        })
-        .then(contract => {
-            console.log('contract successfully deployed ' + contract.options.address)
-            setNewContract(contract);
-            return resolve(contract);
-        });
-});
+    console.log("deploying contract from: " + config.ACCOUNT_CUSTOMER);
+    contract
+      .deploy({ data: "0x" + bytecode })
+      .send({
+        from: config.ACCOUNT_CUSTOMER,
+        gas: TRANSACTION_GAS
+      })
+      .on("error", error => {
+        console.error(error);
+      })
+      .on("transactionHash", hash => {
+        console.log("transactionHash " + hash);
+        ackMsg(socket, hash);
+      })
+      .on("receipt", receipt => {
+        console.log("receipt received " + receipt.contractAddress);
+        console.log(receipt);
+      })
+      .on("confirmation", (confirmationNumber, receipt) => {
+        // debug
+        // console.log('confirmation received ' + receipt.contractAddress);
+      })
+      .then(contract => {
+        console.log(
+          "contract successfully deployed " + contract.options.address
+        );
+        setNewContract(contract);
+        return resolve(contract);
+      });
+  });
 
 function emitContract(socket, contract) {
-    console.log('emitting new contract');
-    contract.methods.status().call()
-        .then(status => {
-            let c = {
-                address: contract.options.address,
-                step: Number(status),
-                timestamp: new Date().getTime()
-            };
-            console.log('emitting new contract ' + JSON.stringify(c));
-            socket.emit('new contract', c);
-
-        });
+  console.log("emitting new contract");
+  contract.methods
+    .status()
+    .call()
+    .then(status => {
+      let c = {
+        address: contract.options.address,
+        step: Number(status),
+        timestamp: new Date().getTime()
+      };
+      console.log("emitting new contract " + JSON.stringify(c));
+      socket.emit("new contract", c);
+    });
 }
 
 function createNewContract() {
-    console.log('createNewContract');
-    CONTRACT = null;
+  console.log("createNewContract");
+  CONTRACT = null;
 
-    deployContract(io, CONTRACT_COMPILED)
-        .then(contract => {
-            console.log('New contract created')
-            emitContract(io, contract);
-            // advance to the first state
-            advanceContractState(0, contract);
-        })
-        .catch(error => console.error(error));
+  deployContract(io, CONTRACT_COMPILED)
+    .then(contract => {
+      console.log("New contract created");
+      emitContract(io, contract);
+      // advance to the first state
+      advanceContractState(0, contract);
+    })
+    .catch(error => console.error(error));
 }
 
 function advanceContractState(state, contract) {
-    console.log('advanceContractState');
-    if (!contract) {
-        console.error('contract not yet initialized');
-        return;
+  console.log("advanceContractState");
+  if (!contract) {
+    console.error("contract not yet initialized");
+    return;
+  }
+  let methods = [
+    {
+      method: contract.methods.setStatusOrdered,
+      from: config.MINER_NODE,
+      args: [config.MINER_NODE]
+    },
+    {
+      method: contract.methods.setStatusToSelected,
+      from: config.MINER_NODE,
+      args: [config.MINER_NODE]
+    },
+    {
+      method: contract.methods.setStatusToRegistered,
+      from: config.MINER_NODE,
+      args: []
+    },
+    {
+      method: contract.methods.setStatusToDelivery,
+      from: config.MINER_NODE,
+      args: []
+    },
+    {
+      method: contract.methods.setStatusToOnSite,
+      from: config.MINER_NODE,
+      args: []
+    },
+    {
+      method: contract.methods.setStatusToReceived,
+      from: config.MINER_NODE,
+      args: []
     }
-    let methods = [
-        {"method": contract.methods.setStatusOrdered, "from": config.MINER_NODE, "args": [config.MINER_NODE]},
-        {"method": contract.methods.setStatusToSelected, "from": config.MINER_NODE, "args": [config.MINER_NODE]},
-        {"method": contract.methods.setStatusToRegistered, "from": config.MINER_NODE, "args": []},
-        {"method": contract.methods.setStatusToDelivery, "from": config.MINER_NODE, "args": []},
-        {"method": contract.methods.setStatusToOnSite, "from": config.MINER_NODE, "args": []},
-        {"method": contract.methods.setStatusToReceived, "from": config.MINER_NODE, "args": []}
-    ];
-    if (state < methods.length) {
-        let m = methods[state];
-        console.log('calling method from: ' + m.from);
-        m.method.apply(null, m.args)
-            .send({
-                from: m.from,
-                gas: TRANSACTION_GAS})
-            .on('transactionHash', hash => {
-                console.log('advanceContractState transactionHash ' + hash);
-                ackMsg(io, hash);
-            })
-            .on('error', error => {
-                console.error('error ' + error);
-            })
-            .then(result => {
-                console.log('advanceContractState then ' + JSON.stringify(result));
-                // INFO: all events are handled by the registered event handler
-                // only do the error handling here
-                if (result && result.gasUsed == TRANSACTION_GAS) {
-                    errMsg(io, 'Transaction failed');
-                }
-            });
-    }
+  ];
+  if (state < methods.length) {
+    let m = methods[state];
+    console.log("calling method from: " + m.from);
+    m.method
+      .apply(null, m.args)
+      .send({
+        from: m.from,
+        gas: TRANSACTION_GAS
+      })
+      .on("transactionHash", hash => {
+        console.log("advanceContractState transactionHash " + hash);
+        ackMsg(io, hash);
+      })
+      .on("error", error => {
+        console.error("error " + error);
+      })
+      .then(result => {
+        console.log("advanceContractState then " + JSON.stringify(result));
+        // INFO: all events are handled by the registered event handler
+        // only do the error handling here
+        if (result && result.gasUsed == TRANSACTION_GAS) {
+          errMsg(io, "Transaction failed");
+        }
+      });
+  }
 }
 
 function errMsg(socket, msg) {
-    socket.emit('ERR', msg);
+  socket.emit("ERR", msg);
 }
 
 function ackMsg(socket, msg) {
-    socket.emit('ACK', msg);
+  socket.emit("ACK", msg);
 }
 
 function initBrowserCommunication() {
-    //---------------------------
-    // communication with browser
-    //---------------------------
-    io.on('connection', socket => {
-        console.log('new connection');
-        if (CONTRACT) {
-            emitContract(socket, CONTRACT);
-        }
-        // debug
-        // walkThrough(socket, 0);
+  //---------------------------
+  // communication with browser
+  //---------------------------
+  io.on("connection", socket => {
+    console.log("new connection");
+    if (CONTRACT) {
+      emitContract(socket, CONTRACT);
+    }
+    // debug
+    // walkThrough(socket, 0);
 
-        //--------------------
-        // client places order
-        //--------------------
-        socket.on('place order', () => {
-            console.log('order placed');
-            createNewContract();
-            ackMsg(socket, 'place order');
-        });
-
-        socket.on('advance', state => {
-            console.log('advance');
-            advanceContractState(state, CONTRACT);
-            ackMsg(socket, 'advance');
-        });
+    //--------------------
+    // client places order
+    //--------------------
+    socket.on("place order", () => {
+      console.log("order placed");
+      createNewContract();
+      ackMsg(socket, "place order");
     });
 
-    //-----------------------------------
-    // communication with contract events
-    //-----------------------------------
-    setNewContractRegister(contract => {
-        console.log('Registering callback for status changed events')
-        contract.events.statusChanged({fromBlock: 0})
-            .on('data', event => {
-                console.log('setNewContract data ' + event); // same results as the optional callback above
-                let _status = Number(event.returnValues._status);
-                io.emit('status changed', {
-                    address: event.address,
-                    step: _status,
-                    timestamp: new Date().getTime()
-                });
-            })
-            .on('changed', event => {
-                console.log('setNewContract changed ' + event); // same results as the optional callback above
-            })
-            .on('error', console.error);
+    socket.on("advance", state => {
+      console.log("advance");
+      advanceContractState(state, CONTRACT);
+      ackMsg(socket, "advance");
     });
+  });
 
-    //-------------------------
-    // communication with truck
-    //-------------------------
-    //TRUCK.bind('tcp://*:5558', err => {
-    //    if (err) {
-    //        console.log(err);
-    //    }
-    //});
+  //-----------------------------------
+  // communication with contract events
+  //-----------------------------------
+  setNewContractRegister(contract => {
+    console.log("Registering callback for status changed events");
+    contract.events
+      .statusChanged({ fromBlock: 0 })
+      .on("data", event => {
+        console.log("setNewContract data " + event); // same results as the optional callback above
+        let _status = Number(event.returnValues._status);
+        io.emit("status changed", {
+          address: event.address,
+          step: _status,
+          timestamp: new Date().getTime()
+        });
+      })
+      .on("changed", event => {
+        console.log("setNewContract changed " + event); // same results as the optional callback above
+      })
+      .on("error", console.error);
+  });
 
-    //---------------------------
-    // communication with scanner
-    //---------------------------
-    //var scanner = zmq.socket('rep');
-    //scanner.bind('tcp://*:5559', err => {
-    //    if (err) {
-    //        console.log(err);
-    //    }
-    // });
+  //-------------------------
+  // communication with truck
+  //-------------------------
+  //TRUCK.bind('tcp://*:5558', err => {
+  //    if (err) {
+  //        console.log(err);
+  //    }
+  //});
 
-    //scanner.on('message', request => {
-    //  let tag = request.toString().replace(/\0*$/g, '').trim();
-    //  console.log("Received request: [" + tag + "]" + NFC_TAGS_TO_STATE[tag] + " " + tag.length);
-    //  console.log(NFC_TAGS_TO_STATE);
-    //  if (NFC_TAGS_TO_STATE[tag] !== undefined) {
-    //   scanner.send("Success");
-    //    advanceContractState(NFC_TAGS_TO_STATE[tag], CONTRACT);
-    //    return;
-    //  }
-    //  scanner.send("Ignored");
-    //});
+  //---------------------------
+  // communication with scanner
+  //---------------------------
+  //var scanner = zmq.socket('rep');
+  //scanner.bind('tcp://*:5559', err => {
+  //    if (err) {
+  //        console.log(err);
+  //    }
+  // });
 
-    //--------
-    // cleanup
-    //--------
-    //process.on('SIGINT', () => {
-    //    TRUCK.close();
-    //    scanner.close();
-    //});
+  //scanner.on('message', request => {
+  //  let tag = request.toString().replace(/\0*$/g, '').trim();
+  //  console.log("Received request: [" + tag + "]" + NFC_TAGS_TO_STATE[tag] + " " + tag.length);
+  //  console.log(NFC_TAGS_TO_STATE);
+  //  if (NFC_TAGS_TO_STATE[tag] !== undefined) {
+  //   scanner.send("Success");
+  //    advanceContractState(NFC_TAGS_TO_STATE[tag], CONTRACT);
+  //    return;
+  //  }
+  //  scanner.send("Ignored");
+  //});
+
+  //--------
+  // cleanup
+  //--------
+  //process.on('SIGINT', () => {
+  //    TRUCK.close();
+  //    scanner.close();
+  //});
 }
 
-http.listen(config.PORT, () => console.log('Last Mile app listening on port http://localhost:3000/'));
+http.listen(config.PORT, () =>
+  console.log("Last Mile app listening on port http://localhost:3000/")
+);
 
 CONTRACT_COMPILED = compileContract(config.CONTRACT);
 
 initBrowserCommunication();
 
 var server = new zerorpc.Server({
-    advanceContract: function advanceContract(state, reply){
-        advanceContractState(state, CONTRACT);
-        reply("Transaction confirmed... Processing Order!");
-    },
+  advanceContract: function advanceContract(state, reply) {
+    advanceContractState(state, CONTRACT);
+    advanceContractState(state + 1, CONTRACT);
+    advanceContractState(state + 2, CONTRACT);
+    advanceContractState(state + 3, CONTRACT);
+
+    reply("Transaction confirmed... Processing Order!");
+  }
 });
 
 server.bind("tcp://0.0.0.0:4242");

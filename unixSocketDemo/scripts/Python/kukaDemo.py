@@ -12,7 +12,7 @@ print("###########################################################")
 
 
 c = zerorpc.Client()
-c.connect("tcp://127.0.0.1:4242")
+c.connect("tcp://89.144.27.100:4242")
 print('Successful connection to the zerorpc server!')
 
 # crating the unix domain socket in order to start the Kuka demo applications
