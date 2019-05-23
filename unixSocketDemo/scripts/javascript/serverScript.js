@@ -35,7 +35,7 @@ var STATE_CONTRACT = new web3.eth.Contract(
  * unlocking functional smart contract account
  */
 
-//web3.eth.personal.importRawKey("eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8", "nxppoachain");
+web3.eth.personal.importRawKey("eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8", "nxppoachain");
 web3.eth.personal.unlockAccount(config.CONTRACT_ACCOUNT_FINAL, "nxppoachain");
 STATE_CONTRACT.options.defaultAccount = config.CONTRACT_ACCOUNT_FINAL;
 
