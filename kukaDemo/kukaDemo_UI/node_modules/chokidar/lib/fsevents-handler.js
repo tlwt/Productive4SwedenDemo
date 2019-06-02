@@ -213,9 +213,15 @@ function(watchPath, realPath, transform, globFilter) {
     }
     function checkFd() {
       fs.open(path, 'r', function(error, fd) {
-        if (fd) fs.close(fd);
-        error && error.code !== 'EACCES' ?
-          handleEvent('unlink') : addOrChange();
+        if (error) {
+          error.code !== 'EACCES' ?
+            handleEvent('unlink') : addOrChange();
+        } else {
+          fs.close(fd, function(err) {
+            err && err.code !== 'EACCES' ?
+              handleEvent('unlink') : addOrChange();
+          });
+        }
       });
     }
     // correct for wrong events emitted
@@ -383,7 +389,10 @@ function(path, transform, forceAdd, priorDepth) {
         processPath,
         wh.globFilter
       );
-      if (closer) this._closers[path] = closer;
+      if (closer) {
+        this._closers[path] = this._closers[path] || [];
+        this._closers[path].push(closer);
+      }
     }.bind(this);
 
     if (typeof transform === 'function') {

@@ -35,7 +35,7 @@ contract OrderContract {
         _;
     }
 
-    function OrderContract() public {
+    constructor() public {
         owner = msg.sender;
         status = STATE.PACKAGE_UNINITIALIZED;
     }

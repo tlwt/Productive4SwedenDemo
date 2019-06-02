@@ -24,10 +24,10 @@ var CONTRACT_COMPILED;
 var TRANSACTION_GAS = 1000000;
 
 // unlocking config and functional account
-web3.eth.personal.importRawKey(
-  "eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8",
-  "nxppoachain"
-);
+//web3.eth.personal.importRawKey(
+//  "eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8",
+//  "nxppoachain"
+//);
 web3.eth.personal.unlockAccount(config.MINER_NODE, "nxppoachain");
 
 //var TRUCK = zmq.socket('rep');
