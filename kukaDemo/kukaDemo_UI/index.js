@@ -350,8 +350,10 @@ var server = new zerorpc.Server({
     advanceContractState(1, CONTRACT);
     advanceContractState(2, CONTRACT);
     advanceContractState(3, CONTRACT);
-    advanceContractState(4, CONTRACT);
-
+    setTimeout( function() {
+	advanceContractState(4, CONTRACT);
+    }, 1000);
+    //advanceContractState(5, CONTRACT);
     reply(null, "Transaction confirmed... Processing Order!");
   }
 });

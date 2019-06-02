@@ -16,7 +16,7 @@ print('Successful Connection to the ZeroRPC Server...')
 # Create the tcp socket and send the Blockchain information to the client
 # On successful connection execute the advanceContract function and send info back
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serverSocket.bind(('localhost', 5252))
+serverSocket.bind(('89.144.27.100', 5252))
 serverSocket.listen(1)
 conn, addr = serverSocket.accept()
 while 1:

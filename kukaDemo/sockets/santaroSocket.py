@@ -9,7 +9,8 @@ print("###########################################################")
 
 # Creating the client socket to connect to the external server and receive the relevant Blockchain information
 socketClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-socketClient.connect(('localhost', 5252))
+socketClient.connect(('89.144.27.100', 5252))
+socketClient.sendall('blockchainTrigger');
 data = socketClient.recv(1024)
 socketClient.close()
 print 'Received', repr(data)
@@ -23,7 +24,7 @@ def waitingForConnection(sock):
             print >> sys.stderr, 'connection from', client_address
             while True:
                 connection.send('blockchainTrigger')
-                print c.advanceContract(state)
+                # print c.advanceContract(state)
             else:
                 print >> sys.stderr, 'no more confirmation possible', client_address
                 break
@@ -33,7 +34,7 @@ def waitingForConnection(sock):
 
 
 def newConnection():
-    print('The current state of the Smart Contract: ', _state)
+    print('The current state of the Smart Contract: confirmed')
     server_address = '/tmp/blockchainSocket.sock'
     try:
         os.unlink(server_address)
@@ -44,7 +45,7 @@ def newConnection():
     print >> sys.stderr, 'starting up on %s' % server_address
     sock.bind(server_address)
     sock.listen(1)
-    waitingForConnection(sock, _state)
+    waitingForConnection(sock)
 
 
 newConnection()

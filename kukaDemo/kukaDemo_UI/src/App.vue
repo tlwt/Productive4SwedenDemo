@@ -12,7 +12,7 @@
             <button class="btn btn-lg order text-uppercase" @click.prevent="accept">
                 <i v-if="!transaction_in_progress" class="fa fa-check"></i>
                 <i v-else class="fa fa-spinner fa-spin"></i>
-                Accpet order</button>
+                Accept order</button>
         </div>
         <div class="row">
             <div class="col headerL"><img class="logo" src="./assets/chainstep.svg">
