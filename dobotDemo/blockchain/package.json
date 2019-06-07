@@ -1,0 +1,11 @@
+{
+  "name": "dobotdemo",
+  "version": "1.0.0",
+  "description": "dobot Demo with Blockchain integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Noah Winneberger",
+  "license": "ISC"
+}
