@@ -371,7 +371,8 @@ var server = new zerorpc.Server({
     advanceContractState(2, CONTRACT);
     advanceContractState(3, CONTRACT);
     setTimeout( function() {
-	    advanceContractState(4, CONTRACT);
+      advanceContractState(4, CONTRACT);
+      // inserting timeout will not be possible for the final demo integration due to it being crap
     }, 5000);
     reply(null, "Transaction confirmed... Processing Order!");
   }
