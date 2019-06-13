@@ -1,3 +1,11 @@
+/***
+ * 
+ * Dobot Demo index.js 
+ * Also including the option of two different inputs for the smart contract they want to execute
+ * 
+ */
+
+
 const config = require("./config/config.js");
 const express = require("express");
 const app = express();
@@ -130,6 +138,7 @@ let deployContract = (socket, compiled_contract) =>
       .on("receipt", receipt => {
         console.log("receipt received " + receipt.contractAddress);
         console.log(receipt);
+        // on receipt send out confirmation to the dobot servers
       })
       .on("confirmation", (confirmationNumber, receipt) => {
         // debug
@@ -141,6 +150,7 @@ let deployContract = (socket, compiled_contract) =>
         );
         setNewContract(contract);
         return resolve(contract);
+        // send out confirmation of final validation
       });
   });
 
@@ -175,6 +185,10 @@ function createNewContract() {
 }
 
 function advanceContractState(state, contract) {
+  /***
+   * critical to get the sequencing of the calls, after stage one which is automatically triggered
+   */
+
   console.log("advanceContractState");
   if (!contract) {
     console.error("contract not yet initialized");
@@ -345,17 +359,25 @@ CONTRACT_COMPILED = compileContract(config.CONTRACT);
 
 initBrowserCommunication();
 
+
+
+//TODO: Update the advanceContract funtion exposure to ensure the consecution of function calls according to the smart contract
 var server = new zerorpc.Server({
+  // zerorpc server for seperate server setup to control the flow  of Blockchain information
+  // also have to divide them into individual calls --> currently only one call to trigger all transactions
+
   advanceContract: function advanceContract(reply) {
     advanceContractState(1, CONTRACT);
     advanceContractState(2, CONTRACT);
     advanceContractState(3, CONTRACT);
     setTimeout( function() {
-	advanceContractState(4, CONTRACT);
-    }, 1000);
-    //advanceContractState(5, CONTRACT);
+	    advanceContractState(4, CONTRACT);
+    }, 5000);
     reply(null, "Transaction confirmed... Processing Order!");
   }
 });
 
 server.bind("tcp://0.0.0.0:4242");
+
+//TODO: integrate async await functions for the correct progression of the smart contract
+//TODO: Future: integration of smart oracles using secure elements
