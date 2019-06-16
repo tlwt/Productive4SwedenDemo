@@ -361,7 +361,8 @@ initBrowserCommunication();
 
 
 
-//TODO: Update the advanceContract funtion exposure to ensure the consecution of function calls according to the smart contract
+//TODO: Update the advanceContract function exposure to ensure the consecution of function calls according to the smart contract
+//TODO: Change the advanceContract function and divide them into separate zerorpc calls 
 var server = new zerorpc.Server({
   // zerorpc server for seperate server setup to control the flow  of Blockchain information
   // also have to divide them into individual calls --> currently only one call to trigger all transactions
