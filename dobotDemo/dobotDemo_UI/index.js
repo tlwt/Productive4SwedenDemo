@@ -360,15 +360,12 @@ CONTRACT_COMPILED = compileContract(config.CONTRACT);
 initBrowserCommunication();
 
 
-
-//TODO: Update the advanceContract function exposure to ensure the consecution of function calls according to the smart contract
-//TODO: Change the advanceContract function and divide them into separate zerorpc calls 
+//TODO: integrate the option to include the calls for both smart contracts
 var server = new zerorpc.Server({
   // zerorpc server for seperate server setup to control the flow  of Blockchain information
-  // also have to divide them into individual calls --> currently only one call to trigger all transactions
 
   advanceContractToOrdered: function advanceContract(reply) {
-    advanceContractState(2, CONTRACT);
+    advanceContractState(1, CONTRACT);
     reply(null, "Transaction confirmed... Creating Order!");
   },
 
@@ -381,7 +378,7 @@ var server = new zerorpc.Server({
     advanceContractState(3, CONTRACT);
     reply(null, "Transaction confirmed... Finalizing Order!");
   },
-  
+
   advanceContractToCompletion: function advanceContract(reply) {
     advanceContractState(4, CONTRACT);
     reply(null, "Transaction confirmed... Order completed!");
