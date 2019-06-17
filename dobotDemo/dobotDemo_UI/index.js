@@ -367,16 +367,26 @@ var server = new zerorpc.Server({
   // zerorpc server for seperate server setup to control the flow  of Blockchain information
   // also have to divide them into individual calls --> currently only one call to trigger all transactions
 
-  advanceContract: function advanceContract(reply) {
-    advanceContractState(1, CONTRACT);
+  advanceContractToOrdered: function advanceContract(reply) {
     advanceContractState(2, CONTRACT);
-    advanceContractState(3, CONTRACT);
-    setTimeout( function() {
-      advanceContractState(4, CONTRACT);
-      // inserting timeout will not be possible for the final demo integration due to it being crap
-    }, 5000);
+    reply(null, "Transaction confirmed... Creating Order!");
+  },
+
+  advanceContractToProcess: function advanceContract(reply) {
+    advanceContractState(2, CONTRACT);
     reply(null, "Transaction confirmed... Processing Order!");
-  }
+  },
+
+  advanceContractToFinalization: function advanceContract(reply) {
+    advanceContractState(3, CONTRACT);
+    reply(null, "Transaction confirmed... Finalizing Order!");
+  },
+  
+  advanceContractToCompletion: function advanceContract(reply) {
+    advanceContractState(4, CONTRACT);
+    reply(null, "Transaction confirmed... Order completed!");
+  },
+
 });
 
 server.bind("tcp://0.0.0.0:4242");
