@@ -1,0 +1,97 @@
+# Meeting Notes
+
+-- Anatoly, delivery of Soaps and Supply Chain Tracking of packages --> perfect integration of the lastMile demo
+
+--> Core agreement, and other agrrements for subcontractors to fully define the actual contract. (Emanuel's Presentation)
+
+--> Triplets for contractual aggreements
+
+--> Benefits for using the Blockchain using it as a proving tool
+
+--> CREATING SOMETHING FLEXIBLE SCALABLE AND REAL WORLD APPLICATIONS AS A MAIN GOAL FOR THE PROJECT
+
+--> What if we create a Blockchain solution of our own?
+
+--> Arrowhead integration of Blockchain Solution
+
+  - ServiceRegistry (IP Addresses, DNS Service)
+  - Orchestration 
+  - Authorization
+
+--> Homomorphic encryption included in Blockchain Technologie
+
+--> Intercloud communication for Arrowhead framework for a later meeting
+
+--> plasma
+
+--> Requirements for the SEB Blockchain Project integrated into the arrowhead framework. 
+
+  - Environment for instant or very fast transaction between parties
+  - Hidden party information
+  - validity of the usage of the money used in the transaction 
+
+--> Arrowhead request to issue a transaction or process on the Blockchain as a new Demo
+
+  - having different services supported by different Blockchain Technoliges that can be called through the service registry from the Arrowhead framework
+
+--> for tomorrow: defining the API for the first Arrowhead Demo
+
+--> getting EthStats set up (Noah)
+
+# Day 2
+
+--> API Discussion:
+
+--> Authorization: paying for a service! 
+
+--> seperate service that checks the blockchain and then creates a token and sends it to the authorization system
+
+--> Bank issued token for only the authorized parties involved in the trade channel, as such only cashable by the authorized parties since only for them the tokens have any value
+
+--> Trust between different banks as a main issue 
+
+--> Interbank Communication
+
+  - Who are you trading with?
+  - Which Bank are they affiliated with?
+  - How to make sure that the trust is verifiable?
+
+--> first level is the individual customers of the banks affiliated with same central bank
+
+--> second level is represented by the banks
+
+--> third level is the ECB or respective central bank
+
+--> implementation of mirror accounts on the blockchain 
+
+--> The banks have to host the underlying blockchain hosting the payment channel
+
+--> Bank not necessarily integrated in the process only if there is no trust between the partners of the transaction process
+
+--> getting the bank into the transaction process not just as the instance transferring payment from one account to the other
+
+
+--> creating an environment where the banks offers customers to create their own accounts... Where do micropayments become relevant?
+
+--> Who would have a benefit from a SEB payment channel?
+
+--> Agile payment system designed by the service registry and the orchestration mechanism 
+
+--> creating the option for the customers to open an SEB account via Blockchain technologies to trade with other customers and in the end cash out! Different Blockchain technologies for different uses
+
+--> creating a Quoruk implementation of the Blockchain Technology 
+
+--> Integration of already existing Demo within an Arrowhead and Quorum plementation with an additional payment channel of the SEB
+
+--> Banks can reevaluate the risk of every transaction
+
+--> izettle as a role model for the ability SEB wants to have within our framework, being able to truly understand the ongoing financial doings 
+
+--> Demo ready for a presentation in June at the LTU
+
+
+* [ ] Noahs Task: Konzept von Payment Channels vs. Fully blown Blockchain Implementation
+* [ ] Emanuel: API Concept version 1
+* [ ] SEB: Overview and consent of the above mentioned tasks
+
+
