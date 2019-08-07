@@ -33,8 +33,10 @@ var TRANSACTION_GAS = 1000000;
 
 // unlocking config and functional account
 //web3.eth.personal.importRawKey(
-//  "eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8",
-//  "nxppoachain"
+  //  "eaa2e6c97bf0c2d3ba761c7de6bb13e55f120162c94ffc0830e2e79d3282bcd8",
+  //  "a9429110be81f7ee354d73977b25cd631374b812958e8f04a33ed5529ab4726f",
+  //"874aa18615d0e6f47538568e5f880c7fdb18f3638c85b47ea35e3dc1b0ac4a4f", 
+  //"nxppoachain"
 //);
 web3.eth.personal.unlockAccount(config.MINER_NODE, "nxppoachain");
 
@@ -180,6 +182,8 @@ function createNewContract() {
       emitContract(io, contract);
       // advance to the first state
       advanceContractState(0, contract);
+      // connect to the server tcp socket
+      //TODO: ZRPC call to th serverSocket
     })
     .catch(error => console.error(error));
 }
@@ -364,22 +368,22 @@ initBrowserCommunication();
 var server = new zerorpc.Server({
   // zerorpc server for seperate server setup to control the flow  of Blockchain information
 
-  advanceContractToOrdered: function advanceContract(reply) {
+  advanceContractToOrdered: function advanceContractToOrdered(reply) {
     advanceContractState(1, CONTRACT);
     reply(null, "Transaction confirmed... Creating Order!");
   },
 
-  advanceContractToProcess: function advanceContract(reply) {
+  advanceContractToProcess: function advanceContractToProcess(reply) {
     advanceContractState(2, CONTRACT);
     reply(null, "Transaction confirmed... Processing Order!");
   },
 
-  advanceContractToFinalization: function advanceContract(reply) {
+  advanceContractToFinalization: function advanceContractToFinalization(reply) {
     advanceContractState(3, CONTRACT);
     reply(null, "Transaction confirmed... Finalizing Order!");
   },
 
-  advanceContractToCompletion: function advanceContract(reply) {
+  advanceContractToCompletion: function advanceContractToCompletion(reply) {
     advanceContractState(4, CONTRACT);
     reply(null, "Transaction confirmed... Order completed!");
   },

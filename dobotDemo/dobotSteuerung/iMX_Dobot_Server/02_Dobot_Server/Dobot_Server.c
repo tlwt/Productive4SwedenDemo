@@ -558,6 +558,7 @@ DBSvr_t executeTPList(tp_t *tpListBegin)
   } while( ui64cnt != currentIndex );
 #ifdef DBG_INFO
   printf("done!\n");
+  sockCL
 #endif
   return DBSVR_OK;
 }
