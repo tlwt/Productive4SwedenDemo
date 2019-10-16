@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "animate.css": "^3.6.1",
-    "bootstrap": "4.0.0",
+    "bootstrap": "4.3.1",
     "css_progress_wizard": "^2.0.0",
     "express": "^4.16.3",
     "font-awesome": "^4.7.0",
