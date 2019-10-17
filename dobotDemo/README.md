@@ -31,6 +31,61 @@ socketClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socketClient.connect(("localhost", 50001))
 ```
 
+# Demo Startup: 
+
+### Server Resources:
+
+```
+root@89.144.27.100
+root@89.144.27.103
+root@test.gollenstede.net
+```
+
+### auf 89.144.27.100:
+
+```
+cd Productive4SwedenDemo/kukaDemo/kukaDemo_UI/
+./start.sh
+```
+
+### auf 89.144.27.103:
+
+```
+cd Productive40/dobotDemo/sockets/
+python serverSocket.py
+```
+
+### auf gollenstede (i.MX) -> 3 shells:
+
+```
+cd Productive40Demo/dobotDemo/sockets
+cd Productive40Demo/dobotDemo/dobotSteuerung/dobot_1
+cd Productive40Demo/dobotDemo/dobotSteuerung/dobot_2
+```
+#### in sockets: 
+
+```
+python dobotCommandServer_test.py
+```
+
+#### dobot_1 und dobot_2:
+```
+cd 02_Dobot_Server
+```
+
+```
+# for dobot1:
+./Dobot_Server -d ttyUSB0 -i -p 50001
+
+#for dobot2:
+./Dobot_Server -d ttyUSB1 -i -p 50002
+```
+
+finally: 
+https://89.122.27.100:3000
+und knopf druecken
+
+# Blockchain Network Structure
 ## dobotdemo (101):
 ### (Network D: 9292)
 
