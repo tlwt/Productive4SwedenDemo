@@ -62,11 +62,6 @@ cd Productive40Demo/dobotDemo/sockets
 cd Productive40Demo/dobotDemo/dobotSteuerung/dobot_1
 cd Productive40Demo/dobotDemo/dobotSteuerung/dobot_2
 ```
-#### in sockets: 
-
-```
-python dobotCommandServer_test.py
-```
 
 #### dobot_1 und dobot_2:
 ```
@@ -79,6 +74,12 @@ cd 02_Dobot_Server
 
 #for dobot2:
 ./Dobot_Server -d ttyUSB1 -i -p 50002
+```
+
+#### in sockets: 
+
+```
+python dobotCommandServer_test.py
 ```
 
 finally: 
