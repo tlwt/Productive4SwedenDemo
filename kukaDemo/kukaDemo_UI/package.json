@@ -14,7 +14,7 @@
     "css_progress_wizard": "^2.0.0",
     "express": "^4.16.3",
     "font-awesome": "^4.7.0",
-    "socket.io": "^2.0.4",
+    "socket.io": "^2.4.0",
     "socket.io-client": "^2.0.4",
     "solc": "^0.4.21",
     "strftime": "^0.10.0",
